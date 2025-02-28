@@ -1,6 +1,6 @@
 from PyQt5.QtWidgets import QMainWindow, QGraphicsItem, QDialog, QApplication, QWidget, QLabel, QPushButton, QGraphicsScene, QGraphicsPixmapItem, QFormLayout, QLineEdit, QWidget, QPushButton, QWidgetItem, QTableWidgetItem, QGraphicsView
 from PyQt5.uic import loadUi
-from PyQt5.QtGui import QPixmap
+from PyQt5.QtGui import QPixmap, QTransform #SVC
 from PyQt5.QtCore import Qt, QTimer
 import sys
 import os
@@ -42,10 +42,13 @@ class CADInstance:
 class MainUI(QMainWindow):
     def __init__(self):
         super(MainUI, self).__init__()
+
+
         loadUi("main.ui", self)  # Load the .ui file
         self.d_horizontal = 0
         self.progress_value = 0
         self.timer = QTimer()
+
 
         # Initialize images variations
         self.images_variations = self.initialize_images_variations()
@@ -53,6 +56,11 @@ class MainUI(QMainWindow):
         # Create a QGraphicsScene
         self.scene = QGraphicsScene()
         self.graphicsView.setScene(self.scene)  # Use the existing graphicsView
+
+        # Invertir el eje Y del QGraphicsView            #SVC
+        transform = QTransform()                             #SVC
+        transform.scale(1, -1)  # Invertir el eje Y             #SVC
+        self.graphicsView.setTransform(transform)             #SVC
 
         # Enable mouse tracking
         self.graphicsView.setMouseTracking(True)
@@ -67,33 +75,65 @@ class MainUI(QMainWindow):
         # Connect menu action
         self.actionParametros_generales.triggered.connect(self.show_parametros_generales)
 
+        # Inicializar el nivel de zoom             #SVC
+        self.zoom_level = 1.0             #SVC
 
-    def initialize_images_variations(self):
+        # Conectar el evento de la rueda del mouse             #SVC
+        self.graphicsView.wheelEvent = self.wheelEvent             #SVC
+
+        
+    def wheelEvent(self, event):             #SVC
+        """Manejar el evento de la rueda del mouse para hacer zoom."""
+        # Determinar la dirección del scroll
+        if event.angleDelta().y() > 0:  # Scroll hacia arriba
+            self.zoom(1.2)  # Aumentar el zoom
+        else:  # Scroll hacia abajo
+            self.zoom(0.8)  # Disminuir el zoom
+
+    def zoom(self, factor):             #SVC
+        """Aplicar el factor de zoom al QGraphicsView."""
+        self.zoom_level *= factor
+        self.zoom_level = min(max(self.zoom_level, 1.0), 4.0)  # Limitar el zoom entre 1.0 y 4.0
+
+        # Aplicar la transformación de zoom
+        transform = QTransform()
+        transform.scale(self.zoom_level, self.zoom_level)
+        transform.scale(1, -1)  # Invertir el eje Y
+        self.graphicsView.setTransform(transform)
+
+
+        
+
+    def initialize_images_variations(self):             #SVC
         bil = 1050
         return [
+            # Variation 1
             [
-                ["LL__LINEA_PROY.jpg", 0, 40, {"Carga (MW)": 0, "Nombre": 0, "Codigo de Linea": 0}, "_"],
-                ["PR__LINEA_PROY.jpg", 0, 80, {"Tension nominal (kV)": 0, "BIL (kVp)": bil, "I nominal (A)": 0, "Clase": 0}, "Pararrayos c-cd"],
-                ["TTC_LINEA_PROY.jpg", 0, 120, {"Tension nominal (kV)": 0, "BIL (kVp)": bil, "Clase de Proteccion": 0, "Tipo": 0}, "TTB-1"],
-                ["SL__LINEA_PROY.jpg", 0, 160, {"Tension nominal (kV)": 0, "BIL (kVp)": bil, "I nominal (A)": 0, "Tipo": 0}, "SL_AT_AV_DOWN"],
-                ["TC__LINEA_PROY.jpg", 0, 200, {"Tension nominal (kV)": 0, "BIL (kVp)": bil, "I nominal (A)": 0, "Tipo": 0, "Relacion devanado primario": 0, "Relacion devanado secundario": 0, "Burden": 0}, "_"],
-                ["IP__LINEA_PROY.jpg", 0, 240, {"Tension nominal (kV)": 0, "BIL (kVp)": bil, "I nominal (A)": 0}, "_"],
-                ["SB__LINEA_PROY.jpg", 0, 280, {"Tension nominal (kV)": 0, "BIL (kVp)": bil, "I nominal (A)": 0, "Tipo": 0}, "_"],
+                ["LL__LINEA_PROY_DWN.jpg", 0, 280+280, {"Carga (MW)": 0, "Nombre": 0, "Codigo de Linea": 0}, "SALIDA_LINEA"],
+                ["PR__LINEA_PROY.jpg", 0, 280+240, {"Tension nominal (kV)": 0, "BIL (kVp)": bil, "I nominal (A)": 0, "Clase": 0}, "Pararrayos c-cd1"],
+                ["TTC_LINEA_PROY.jpg", 0, 280+200, {"Tension nominal (kV)": 0, "BIL (kVp)": bil, "Clase de Proteccion": 0, "Tipo": 0}, "TTC_AT_2S"],
+                ["SL__LINEA_PROY.jpg", 0, 280+160, {"Tension nominal (kV)": 0, "BIL (kVp)": bil, "I nominal (A)": 0, "Tipo": 0}, "SL_AT_AV_DOWN1"],
+                ["TC__LINEA_PROY.jpg", 0, 280+120, {"Tension nominal (kV)": 0, "BIL (kVp)": bil, "I nominal (A)": 0, "Tipo": 0, "Relacion devanado primario": 0, "Relacion devanado secundario": 0, "Burden": 0}, "CT_AT_4S"],
+                ["IP__LINEA_PROY.jpg", 0, 280+80, {"Tension nominal (kV)": 0, "BIL (kVp)": bil, "I nominal (A)": 0}, "IP_AT"],
+                ["SB__LINEA_PROY_DWN.jpg", 0, 280+40, {"Tension nominal (kV)": 0, "BIL (kVp)": bil, "I nominal (A)": 0, "Tipo": 0}, "SB_AT_AC"],
             ],
-            # Variation 2
+
+            # Variation 1
+
             [
-                ["LL__LINEA_PROY.jpg", 0, 280+280, {"Carga (MW)": 0, "Nombre": 0, "Codigo de Linea": 0}, "_"],
-                ["PR__LINEA_PROY.jpg", 0, 280+240, {"Tension nominal (kV)": 0, "BIL (kVp)": bil, "I nominal (A)": 0, "Clase": 0}, "Pararrayos c-cd"],
-                ["TTC_LINEA_PROY.jpg", 0, 280+200, {"Tension nominal (kV)": 0, "BIL (kVp)": bil, "Clase de Proteccion": 0, "Tipo": 0}, "TTB-1"],
-                ["SL__LINEA_PROY.jpg", 0, 280+160, {"Tension nominal (kV)": 0, "BIL (kVp)": bil, "I nominal (A)": 0, "Tipo": 0}, "SL_AT_AV_DOWN"],
-                ["TC__LINEA_PROY.jpg", 0, 280+120, {"Tension nominal (kV)": 0, "BIL (kVp)": bil, "I nominal (A)": 0, "Tipo": 0, "Relacion devanado primario": 0, "Relacion devanado secundario": 0, "Burden": 0}, "_"],
-                ["IP__LINEA_PROY.jpg", 0, 280+80, {"Tension nominal (kV)": 0, "BIL (kVp)": bil, "I nominal (A)": 0}, "_"],
-                ["SB__LINEA_PROY.jpg", 0, 280+40, {"Tension nominal (kV)": 0, "BIL (kVp)": bil, "I nominal (A)": 0, "Tipo": 0}, "_"],
+                ["LL__LINEA_PROY.jpg", 0, 40, {"Carga (MW)": 0, "Nombre": 0, "Codigo de Linea": 0}, "SALIDA_LINEA_DWN"],
+                ["PR__LINEA_PROY.jpg", 0, 80, {"Tension nominal (kV)": 0, "BIL (kVp)": bil, "I nominal (A)": 0, "Clase": 0}, "Pararrayos c-cd1"],
+                ["TTC_LINEA_PROY.jpg", 0, 120, {"Tension nominal (kV)": 0, "BIL (kVp)": bil, "Clase de Proteccion": 0, "Tipo": 0}, "TTC_AT_2S"],
+                ["SL__LINEA_PROY.jpg", 0, 160, {"Tension nominal (kV)": 0, "BIL (kVp)": bil, "I nominal (A)": 0, "Tipo": 0}, "SL_AT_AV_DOWN2"],
+                ["TC__LINEA_PROY.jpg", 0, 200, {"Tension nominal (kV)": 0, "BIL (kVp)": bil, "I nominal (A)": 0, "Tipo": 0, "Relacion devanado primario": 0, "Relacion devanado secundario": 0, "Burden": 0}, "CT_AT_4S_DOWN"],
+                ["IP__LINEA_PROY.jpg", 0, 240, {"Tension nominal (kV)": 0, "BIL (kVp)": bil, "I nominal (A)": 0}, "IP_AT_DOWN"],
+                ["SB__LINEA_PROY.jpg", 0, 280, {"Tension nominal (kV)": 0, "BIL (kVp)": bil, "I nominal (A)": 0, "Tipo": 0}, "SB_AT_AC_DOWN"],
             ],
+
             # Variation 3
             [
-                ["LL__LINEA_PROY.jpg", 0, 40, {"Carga (MW)": 0, "Nombre": 0, "Codigo de Linea": 0}, "_"],
-                ["PR__LINEA_PROY.jpg", 0, 100, {"Tension nominal (kV)": 0, "BIL (kVp)": bil, "I nominal (A)": 0, "Clase": 0}, "Pararrayos c-cd"],
+                ["LL__LINEA_PROY.jpg", 0, 40, {"Carga (MW)": 0, "Nombre": 0, "Codigo de Linea": 0}, "-"],
+                ["PR__LINEA_PROY.jpg", 0, 100, {"Tension nominal (kV)": 0, "BIL (kVp)": bil, "I nominal (A)": 0, "Clase": 0}, "Pararrayos c-cd1"],
                 ["TTC_LINEA_PROY.jpg", 0, 160, {"Tension nominal (kV)": 0, "BIL (kVp)": bil, "Clase de Proteccion": 0, "Tipo": 0}, "TTB-1"],
                 ["SL__LINEA_PROY.jpg", 0, 220, {"Tension nominal (kV)": 0, "BIL (kVp)": bil, "I nominal (A)": 0, "Tipo": 0}, "SL_AT_AV_DOWN"],
                 ["TC__LINEA_PROY.jpg", 0, 280, {"Tension nominal (kV)": 0, "BIL (kVp)": bil, "I nominal (A)": 0, "Tipo": 0, "Relacion devanado primario": 0, "Relacion devanado secundario": 0, "Burden": 0}, "_"],
@@ -145,7 +185,11 @@ class MainUI(QMainWindow):
                 block_name = instance.block_type
                 if block_name in listado:
                     acad.model.InsertBlock(APoint(instance.x_position, instance.y_position, 0), block_name, 1, 1, 1, 0)
-                    acad.model.AddMText(APoint(instance.x_position, instance.y_position, 0), 10, instance.image_name)
+                    acad.model.AddMText(APoint(instance.x_position+30, instance.y_position+5, 0), 10, instance.image_name)             #SVC
+                   # Check if 'BIL (kVp)' exists in inputs before accessing it             #SVC
+                    bil_value = instance.inputs.get('BIL (kVp)', 'NULL')  # Use 'N/A' or any default value if the key doesn't exist            #SVC
+                    acad.model.AddMText(APoint(instance.x_position + 30, instance.y_position -5 , 0), 10, bil_value)         #SVC
+
                 self.progress_value += (1 / total_instances) * 100
                 self.update_progress()
 
