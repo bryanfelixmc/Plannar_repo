@@ -186,11 +186,30 @@ class MainUI(QMainWindow):
                 if block_name in listado:
                     acad.model.InsertBlock(APoint(instance.x_position, instance.y_position, 0), block_name, 1, 1, 1, 0)
                     acad.model.AddMText(APoint(instance.x_position+30, instance.y_position+5, 0), 10, instance.image_name)             #SVC
- 
+
+                bil_value = instance.inputs.get('BIL (kVp)', 'NULL')  # Use 'N/A' or any default value if the key doesn't exist
+                vol_value = instance.inputs.get('Tension nominal (kV)', 'NULL')
+                corr_value = instance.inputs.get('I nominal (A)', 'NULL')
+
+                values_to_print = []
+                if bil_value != 'NULL':
+                    values_to_print.append(f"{bil_value}"+ "kVp")
+                if vol_value != 'NULL' and corr_value != 'NULL':
+                    values_to_print.append(f"{vol_value}kV,{corr_value}A")
+                elif vol_value != 'NULL':
+                    values_to_print.append(f"{vol_value} kV")
+                elif corr_value != 'NULL':
+                    values_to_print.append(f"{corr_value} A")
+
+                # Join the values with a comma and space
+                if values_to_print:
+                    acad.model.AddMText(APoint(instance.x_position + 30, instance.y_position - 5, 0), 10, " ".join(values_to_print))
+
+                    """
                    # Check if 'BIL (kVp)' exists in inputs before accessing it             #SVC
                     bil_value = instance.inputs.get('BIL (kVp)', 'NULL')  # Use 'N/A' or any default value if the key doesn't exist            #SVC
                     acad.model.AddMText(APoint(instance.x_position + 30, instance.y_position -5 , 0), 10, bil_value)         #SVC
-
+                    """
 
                 self.progress_value += (1 / total_instances) * 100
                 self.update_progress()
