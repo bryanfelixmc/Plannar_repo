@@ -3,9 +3,15 @@ from PyQt5.uic import loadUi
 from PyQt5.QtGui import QPixmap, QTransform #SVC
 from PyQt5.QtCore import Qt, QTimer
 import sys
+from PyQt5.QtWidgets import  QTableWidget, QTableWidgetItem
 import os
 from pyautocad import Autocad, APoint
 import pandas as pd
+
+from PyQt5.QtWidgets import QDialog, QVBoxLayout, QLabel, QLineEdit, QPushButton, QTableWidgetItem
+
+
+
 class CADInstance:
     all_instances = []  # Class variable to store all CAD instances
 
@@ -43,11 +49,18 @@ class MainUI(QMainWindow):
     def __init__(self):
         super(MainUI, self).__init__()
 
-
         loadUi("main.ui", self)  # Load the .ui file
         self.d_horizontal = 0
         self.progress_value = 0
         self.timer = QTimer()
+
+
+        # Buscar la tabla de posiciones en main.ui
+        self.position_table = self.findChild(QTableWidget, "table04")
+        if not self.position_table:
+            print("Error: No se encontró 'tabla04' en main.ui. Verifica el nombre en Qt Designer.")
+        else:
+            print("Tabla de posiciones encontrada correctamente.")
 
 
         # Initialize images variations
@@ -71,6 +84,9 @@ class MainUI(QMainWindow):
         self.button06.clicked.connect(lambda: self.add_images(self.images_variations[2]))
         self.button02.clicked.connect(self.print_all_data_instances)
         self.button04.clicked.connect(self.cad_plot)
+        # Boton para limpiar el dibujo
+        self.borrar.clicked.connect(self.limpiar_dibujo)
+        
 
         # Connect menu action
         self.actionParametros_generales.triggered.connect(self.show_parametros_generales)
@@ -118,11 +134,11 @@ class MainUI(QMainWindow):
                 ["SB__LINEA_PROY_DWN.jpg", 0, 280+40, {"Tension nominal (kV)": 0, "BIL (kVp)": bil, "I nominal (A)": 0, "Tipo": 0}, "SB_AT_AC"],
             ],
 
-            # Variation 1
+            # Variation 2
 
             [
                 ["LL__LINEA_PROY.jpg", 0, 40, {"Carga (MW)": 0, "Nombre": 0, "Codigo de Linea": 0}, "SALIDA_LINEA_DWN"],
-                ["PR__LINEA_PROY.jpg", 0, 80, {"Tension nominal (kV)": 0, "BIL (kVp)": bil, "I nominal (A)": 0, "Clase": 0}, "Pararrayos c-cd1"],
+                ["PR__LINEA_PROY.jpg", 0, 80, {"Tension nominal (kV)": 0, "BIL (kVp)": bil, "I nominal (A)": 0, "Clase": 0,}, "Pararrayos c-cd1"],
                 ["TTC_LINEA_PROY.jpg", 0, 120, {"Tension nominal (kV)": 0, "BIL (kVp)": bil, "Clase de Proteccion": 0, "Tipo": 0}, "TTC_AT_2S"],
                 ["SL__LINEA_PROY.jpg", 0, 160, {"Tension nominal (kV)": 0, "BIL (kVp)": bil, "I nominal (A)": 0, "Tipo": 0}, "SL_AT_AV_DOWN2"],
                 ["TC__LINEA_PROY.jpg", 0, 200, {"Tension nominal (kV)": 0, "BIL (kVp)": bil, "I nominal (A)": 0, "Tipo": 0, "Relacion devanado primario": 0, "Relacion devanado secundario": 0, "Burden": 0}, "CT_AT_4S_DOWN"],
@@ -141,6 +157,7 @@ class MainUI(QMainWindow):
                 ["SB__LINEA_PROY.jpg", 0, 400, {"Tension nominal (kV)": 0, "BIL (kVp)": bil, "I nominal (A)": 0, "Tipo": 0}, "_"],
             ]
         ]
+
 
     def add_images(self, images):
         image_path = os.path.join(os.getcwd(), "SB_LINEA_PROY")
@@ -162,6 +179,7 @@ class MainUI(QMainWindow):
                 image_widget.setPixmap(pixmap)
                 image_widget.setPos(self.d_horizontal, y_position)
                 self.scene.addItem(image_widget)
+            
 
                 # Create a CADInstance and it will be stored in the class variable
                 CADInstance(image_name, self.d_horizontal, y_position, inputs, block_type)
@@ -171,6 +189,7 @@ class MainUI(QMainWindow):
         self.d_horizontal += 85  # Update d_horizontal for the next image
 
     def cad_plot(self):
+        self.clear_autocad()  # Limpiar AutoCAD antes de dibujar
         self.button04.setEnabled(False)  # Disable the plot button
         try:
             self.start_progress()
@@ -251,6 +270,22 @@ class MainUI(QMainWindow):
             df = pd.DataFrame(data)
             # Print the DataFrame as a table
             print(df)#.to_string(index=False))  # Use to_string to format the output nicely
+
+    def update_position_table(self, x, y):
+        """Actualiza table04 con las coordenadas X e Y del bloque seleccionado"""
+        if not self.position_table:
+            print("No se puede actualizar porque la tabla no fue encontrada.")
+            return
+
+        self.position_table.setRowCount(2)  # Solo dos filas: X e Y
+        self.position_table.setColumnCount(2)
+       
+
+        # Agregar valores X e Y a la tabla
+        self.position_table.setItem(1, 0, QTableWidgetItem(str(x)))
+        self.position_table.setItem(1, 1, QTableWidgetItem(str(y)))
+
+
     def show_parametros_generales(self):
         some_dictionary = {
             "Parameter 1": "Value 1",
@@ -261,6 +296,30 @@ class MainUI(QMainWindow):
         self.parametros_widget.setWindowTitle("General Parameters")
         self.parametros_widget.resize(400, 300)
         self.parametros_widget.exec_()
+    
+    def clear_autocad(self):
+        """Elimina todos los elementos de AutoCAD antes de dibujar un nuevo diagrama."""
+        try:
+            acad = Autocad(create_if_not_exists=True, visible=True)
+            doc = acad.ActiveDocument
+
+            # Iterar sobre los objetos de ModelSpace y eliminarlos
+            for obj in list(doc.ModelSpace):
+                obj.Delete()
+        
+            acad.ZoomAll()  # Ajustar la vista
+            print("AutoCAD ha sido limpiado correctamente.")
+        except Exception as e:
+            print(f"Error al limpiar AutoCAD: {e}")
+
+    def limpiar_dibujo(self):
+        """Limpia la escena y reinicia las variables para empezar de nuevo."""
+        self.scene.clear()  # Borra todos los elementos de la escena
+        self.dibujos_guardados = []  # Vacía el historial de dibujos
+        self.indice_dibujo_actual = -1  # Reinicia el índice del historial
+        self.d_horizontal = 0  # Reinicia la posición de los elementos
+        CADInstance.all_instances = []  # Borra las instancias de AutoCAD
+        print("Se ha limpiado el dibujo y el historial.")
 
 class ImageWidget(QGraphicsPixmapItem):
     def __init__(self, image_path, inputs, main_ui, x, y, block_type, parent=None):
@@ -295,6 +354,8 @@ class ImageWidget(QGraphicsPixmapItem):
     def itemChange(self, change, value):
         """Handle position updates"""
         if change == QGraphicsItem.ItemPositionHasChanged:
+            prev_x, prev_y = self.x(), self.y()
+            self.main_ui.save_action("move_block", (self.cad_instance.block_type, prev_x, prev_y))
             self.position_changed()
         return super().itemChange(change, value)
 
@@ -304,6 +365,7 @@ class ImageWidget(QGraphicsPixmapItem):
             self.form_widget.show()
         elif event.button() == Qt.LeftButton:
             self.show_data()
+            self.main_ui.update_position_table(self.x(), self.y())
         super().mousePressEvent(event)  # Call the base class implementation
     
     def set_form_inputs(self):
@@ -354,6 +416,35 @@ class ImageWidget(QGraphicsPixmapItem):
             table_widget.setItem(row, 1, QTableWidgetItem(str(value)))
             row += 1
 
+class PositionEditor(QDialog):
+    def __init__(self, parent=None, pos_x=0, pos_y=0):
+        super(PositionEditor, self).__init__(parent)
+        self.setWindowTitle("Editar Posición")
+        self.setGeometry(100, 100, 250, 150)
+        
+        layout = QVBoxLayout()
+
+        # Campos de entrada para X y Y
+        self.x_label = QLabel("Posición X:")
+        self.x_input = QLineEdit(str(pos_x))
+        layout.addWidget(self.x_label)
+        layout.addWidget(self.x_input)
+
+        self.y_label = QLabel("Posición Y:")
+        self.y_input = QLineEdit(str(pos_y))
+        layout.addWidget(self.y_label)
+        layout.addWidget(self.y_input)
+
+        # Botón para guardar
+        self.save_button = QPushButton("Guardar")
+        self.save_button.clicked.connect(self.accept)
+        layout.addWidget(self.save_button)
+
+        self.setLayout(layout)
+
+    def get_positions(self):
+        return float(self.x_input.text()), float(self.y_input.text())
+
 class ParametrosGenerales(QDialog):
     def __init__(self, some_dictionary, parent=None):
         super(ParametrosGenerales, self).__init__(parent)
@@ -384,7 +475,6 @@ class ParametrosGenerales(QDialog):
                     saved_data[label.text()] = widget.text()
         print("Saved Data:", saved_data)  # Consider replacing with logging
         self.accept()
-
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
