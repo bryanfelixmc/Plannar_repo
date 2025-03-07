@@ -1,16 +1,11 @@
-from PyQt5.QtWidgets import QMainWindow, QGraphicsItem, QDialog, QApplication, QWidget, QLabel, QPushButton, QGraphicsScene, QGraphicsPixmapItem, QFormLayout, QLineEdit, QWidget, QPushButton, QWidgetItem, QTableWidgetItem, QGraphicsView
+from PyQt5.QtWidgets import QMainWindow, QGraphicsItem, QDialog, QApplication, QWidget, QLabel, QPushButton, QGraphicsScene, QGraphicsPixmapItem, QFormLayout, QLineEdit, QWidget, QWidgetItem, QTableWidgetItem, QGraphicsView, QTableWidget,QVBoxLayout
 from PyQt5.uic import loadUi
 from PyQt5.QtGui import QPixmap, QTransform #SVC
 from PyQt5.QtCore import Qt, QTimer
 import sys
-from PyQt5.QtWidgets import  QTableWidget, QTableWidgetItem
 import os
 from pyautocad import Autocad, APoint
 import pandas as pd
-
-from PyQt5.QtWidgets import QDialog, QVBoxLayout, QLabel, QLineEdit, QPushButton, QTableWidgetItem
-
-
 
 class CADInstance:
     all_instances = []  # Class variable to store all CAD instances
@@ -55,11 +50,11 @@ class MainUI(QMainWindow):
         self.timer = QTimer()
 
 
-        # Buscar la tabla de posiciones en main.ui
-        self.position_table = self.findChild(QTableWidget, "table04")
-        if not self.position_table:
-            print("Error: No se encontró 'tabla04' en main.ui. Verifica el nombre en Qt Designer.")
-        else:
+        # Buscar la tabla de posiciones en main.ui      #MDELACRUZ
+        self.position_table = self.findChild(QTableWidget, "table04")           #MDELACRUZ
+        if not self.position_table:          #MDELACRUZ
+            print("Error: No se encontró 'tabla04' en main.ui. Verifica el nombre en Qt Designer.") 
+        else:  #MDELACRUZ
             print("Tabla de posiciones encontrada correctamente.")
 
 
@@ -84,8 +79,8 @@ class MainUI(QMainWindow):
         self.button06.clicked.connect(lambda: self.add_images(self.images_variations[2]))
         self.button02.clicked.connect(self.print_all_data_instances)
         self.button04.clicked.connect(self.cad_plot)
-        # Boton para limpiar el dibujo
-        self.borrar.clicked.connect(self.limpiar_dibujo)
+        # Boton para limpiar el dibujo                          #MDELACRUZ
+        self.borrar.clicked.connect(self.limpiar_dibujo)         #MDELACRUZ
         
 
         # Connect menu action
@@ -189,7 +184,7 @@ class MainUI(QMainWindow):
         self.d_horizontal += 85  # Update d_horizontal for the next image
 
     def cad_plot(self):
-        self.clear_autocad()  # Limpiar AutoCAD antes de dibujar
+        self.clear_autocad()  # Limpiar AutoCAD antes de dibujar  #MDELACRUZ
         self.button04.setEnabled(False)  # Disable the plot button
         try:
             self.start_progress()
@@ -271,19 +266,19 @@ class MainUI(QMainWindow):
             # Print the DataFrame as a table
             print(df)#.to_string(index=False))  # Use to_string to format the output nicely
 
-    def update_position_table(self, x, y):
+    def update_position_table(self, x, y):  #MDELACRUZ
         """Actualiza table04 con las coordenadas X e Y del bloque seleccionado"""
-        if not self.position_table:
+        if not self.position_table:  #MDELACRUZ
             print("No se puede actualizar porque la tabla no fue encontrada.")
             return
 
-        self.position_table.setRowCount(2)  # Solo dos filas: X e Y
-        self.position_table.setColumnCount(2)
+        self.position_table.setRowCount(2)  # Solo dos filas: X e Y  #MDELACRUZ
+        self.position_table.setColumnCount(2)  #MDELACRUZ
        
 
-        # Agregar valores X e Y a la tabla
-        self.position_table.setItem(1, 0, QTableWidgetItem(str(x)))
-        self.position_table.setItem(1, 1, QTableWidgetItem(str(y)))
+        # Agregar valores X e Y a la tabla  #MDELACRUZ
+        self.position_table.setItem(1, 0, QTableWidgetItem(str(x)))   #MDELACRUZ
+        self.position_table.setItem(1, 1, QTableWidgetItem(str(y)))   #MDELACRUZ
 
 
     def show_parametros_generales(self):
@@ -297,29 +292,29 @@ class MainUI(QMainWindow):
         self.parametros_widget.resize(400, 300)
         self.parametros_widget.exec_()
     
-    def clear_autocad(self):
+    def clear_autocad(self):   #MDELACRUZ
         """Elimina todos los elementos de AutoCAD antes de dibujar un nuevo diagrama."""
         try:
-            acad = Autocad(create_if_not_exists=True, visible=True)
+            acad = Autocad(create_if_not_exists=True, visible=True)   #MDELACRUZ
             doc = acad.ActiveDocument
 
-            # Iterar sobre los objetos de ModelSpace y eliminarlos
+            # Iterar sobre los objetos de ModelSpace y eliminarlos  #MDELACRUZ
             for obj in list(doc.ModelSpace):
                 obj.Delete()
         
             acad.ZoomAll()  # Ajustar la vista
-            print("AutoCAD ha sido limpiado correctamente.")
+            print("AutoCAD ha sido limpiado correctamente.")  #MDELACRUZ
         except Exception as e:
             print(f"Error al limpiar AutoCAD: {e}")
 
     def limpiar_dibujo(self):
         """Limpia la escena y reinicia las variables para empezar de nuevo."""
-        self.scene.clear()  # Borra todos los elementos de la escena
+        self.scene.clear()  # Borra todos los elementos de la escena  #MDELACRUZ
         self.dibujos_guardados = []  # Vacía el historial de dibujos
         self.indice_dibujo_actual = -1  # Reinicia el índice del historial
-        self.d_horizontal = 0  # Reinicia la posición de los elementos
+        self.d_horizontal = 0  # Reinicia la posición de los elementos  #MDELACRUZ
         CADInstance.all_instances = []  # Borra las instancias de AutoCAD
-        print("Se ha limpiado el dibujo y el historial.")
+        print("Se ha limpiado el dibujo y el historial.")  #MDELACRUZ
 
 class ImageWidget(QGraphicsPixmapItem):
     def __init__(self, image_path, inputs, main_ui, x, y, block_type, parent=None):
@@ -354,8 +349,8 @@ class ImageWidget(QGraphicsPixmapItem):
     def itemChange(self, change, value):
         """Handle position updates"""
         if change == QGraphicsItem.ItemPositionHasChanged:
-            prev_x, prev_y = self.x(), self.y()
-            self.main_ui.save_action("move_block", (self.cad_instance.block_type, prev_x, prev_y))
+            prev_x, prev_y = self.x(), self.y()   #MDELACRUZ
+            self.main_ui.save_action("move_block", (self.cad_instance.block_type, prev_x, prev_y))  #MDELACRUZ
             self.position_changed()
         return super().itemChange(change, value)
 
@@ -365,7 +360,7 @@ class ImageWidget(QGraphicsPixmapItem):
             self.form_widget.show()
         elif event.button() == Qt.LeftButton:
             self.show_data()
-            self.main_ui.update_position_table(self.x(), self.y())
+            self.main_ui.update_position_table(self.x(), self.y())  #MDELACRUZ
         super().mousePressEvent(event)  # Call the base class implementation
     
     def set_form_inputs(self):
@@ -416,34 +411,34 @@ class ImageWidget(QGraphicsPixmapItem):
             table_widget.setItem(row, 1, QTableWidgetItem(str(value)))
             row += 1
 
-class PositionEditor(QDialog):
-    def __init__(self, parent=None, pos_x=0, pos_y=0):
+class PositionEditor(QDialog):  #MDELACRUZ
+    def __init__(self, parent=None, pos_x=0, pos_y=0):  #MDELACRUZ
         super(PositionEditor, self).__init__(parent)
-        self.setWindowTitle("Editar Posición")
+        self.setWindowTitle("Editar Posición")  #MDELACRUZ
         self.setGeometry(100, 100, 250, 150)
         
-        layout = QVBoxLayout()
+        layout = QVBoxLayout()  #MDELACRUZ
 
         # Campos de entrada para X y Y
-        self.x_label = QLabel("Posición X:")
+        self.x_label = QLabel("Posición X:")  #MDELACRUZ
         self.x_input = QLineEdit(str(pos_x))
         layout.addWidget(self.x_label)
-        layout.addWidget(self.x_input)
+        layout.addWidget(self.x_input)  #MDELACRUZ
 
         self.y_label = QLabel("Posición Y:")
-        self.y_input = QLineEdit(str(pos_y))
+        self.y_input = QLineEdit(str(pos_y))  #MDELACRUZ
         layout.addWidget(self.y_label)
-        layout.addWidget(self.y_input)
+        layout.addWidget(self.y_input)  #MDELACRUZ
 
         # Botón para guardar
-        self.save_button = QPushButton("Guardar")
+        self.save_button = QPushButton("Guardar")  #MDELACRUZ
         self.save_button.clicked.connect(self.accept)
-        layout.addWidget(self.save_button)
+        layout.addWidget(self.save_button)  #MDELACRUZ
 
-        self.setLayout(layout)
+        self.setLayout(layout)  #MDELACRUZ
 
-    def get_positions(self):
-        return float(self.x_input.text()), float(self.y_input.text())
+    def get_positions(self):  #MDELACRUZ
+        return float(self.x_input.text()), float(self.y_input.text())  #MDELACRUZ
 
 class ParametrosGenerales(QDialog):
     def __init__(self, some_dictionary, parent=None):
