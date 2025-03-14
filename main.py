@@ -1,62 +1,26 @@
 from PyQt5.QtWidgets import QMainWindow, QGraphicsItem, QDialog, QApplication, QWidget, QLabel, QPushButton, QGraphicsScene, QGraphicsPixmapItem, QFormLayout, QLineEdit, QWidget, QWidgetItem, QTableWidgetItem, QGraphicsView, QTableWidget,QVBoxLayout
 from PyQt5.uic import loadUi
 from PyQt5.QtGui import QPixmap, QTransform #SVC
-from PyQt5.QtCore import Qt, QTimer
+from PyQt5.QtCore import Qt, QTimer, QEvent
 import sys
 import os
 from pyautocad import Autocad, APoint
 import pandas as pd
 
-class CADInstance:
-    all_instances = []  # Class variable to store all CAD instances
-
-    def __init__(self, image_name, x_position, y_position, inputs, block_type):
-        self.image_name = image_name
-        self.x_position = x_position
-        self.y_position = y_position
-        self.inputs = inputs
-        self.block_type = block_type
-        
-        # Check for duplicates before appending
-        if not self.is_duplicate():
-            CADInstance.all_instances.append(self)  # Store instance in class variable
-        else:
-            print(f"Duplicate instance not added: {self}")
-
-    def is_duplicate(self):
-        """Check if an instance with the same attributes already exists."""
-        for instance in CADInstance.all_instances:
-            if (instance.image_name == self.image_name and
-                instance.x_position == self.x_position and
-                instance.y_position == self.y_position and
-                instance.block_type == self.block_type and
-                self.inputs == instance.inputs):  # Compare as dictionaries
-                print(f"Duplicate found: {instance} with attributes: "
-                    f"Image Name: {instance.image_name}, "
-                    f"X Position: {instance.x_position}, "
-                    f"Y Position: {instance.y_position}, "
-                    f"Inputs: {instance.inputs}, "
-                    f"Block Type: {instance.block_type}")
-                return True
-        return False
+import win32com.client
 
 class MainUI(QMainWindow):
     def __init__(self):
-        super(MainUI, self).__init__()
+        super().__init__()
 
-        loadUi("main.ui", self)  # Load the .ui file
+        self.inicializar()  # Load the .ui file
         self.d_horizontal = 0
         self.progress_value = 0
         self.timer = QTimer()
 
-
         # Buscar la tabla de posiciones en main.ui      #MDELACRUZ
         self.position_table = self.findChild(QTableWidget, "table04")           #MDELACRUZ
-        if not self.position_table:          #MDELACRUZ
-            print("Error: No se encontró 'tabla04' en main.ui. Verifica el nombre en Qt Designer.") 
-        else:  #MDELACRUZ
-            print("Tabla de posiciones encontrada correctamente.")
-
+        self.revisar_existencia_de_tabla04()
 
         # Initialize images variations
         self.images_variations = self.initialize_images_variations()
@@ -66,23 +30,16 @@ class MainUI(QMainWindow):
         self.graphicsView.setScene(self.scene)  # Use the existing graphicsView
 
         # Invertir el eje Y del QGraphicsView            #SVC
-        transform = QTransform()                             #SVC
-        transform.scale(1, -1)  # Invertir el eje Y             #SVC
-        self.graphicsView.setTransform(transform)             #SVC
+        self.graphicsView.setTransform(self.inversion_ejes())   # Invertir el eje Y       #SVC
 
         # Enable mouse tracking
         self.graphicsView.setMouseTracking(True)
+
+        #Permite detectar el movimiento sin hacer clic
+        self.graphicsView.viewport().installEventFilter(self)  # Captura eventos del mouse
         
         # Connect buttons to their respective methods
-        self.button01.clicked.connect(lambda: self.add_images(self.images_variations[0]))
-        self.button05.clicked.connect(lambda: self.add_images(self.images_variations[1]))
-        self.button06.clicked.connect(lambda: self.add_images(self.images_variations[2]))
-        self.button02.clicked.connect(self.print_all_data_instances)
-        self.button04.clicked.connect(self.cad_plot)
-        # Boton para limpiar el dibujo                          #MDELACRUZ
-        self.borrar.clicked.connect(self.limpiar_dibujo)         #MDELACRUZ
-        
-
+        self.activar_botones()
         # Connect menu action
         self.actionParametros_generales.triggered.connect(self.show_parametros_generales)
 
@@ -90,8 +47,34 @@ class MainUI(QMainWindow):
         self.zoom_level = 1.0             #SVC
 
         # Conectar el evento de la rueda del mouse             #SVC
-        self.graphicsView.wheelEvent = self.wheelEvent             #SVC
+        self.graphicsView.wheelEvent = self.wheelEvent
 
+    def activar_botones(self):
+        self.button01.clicked.connect(lambda: self.add_images(self.images_variations[0],"SB_LINEA_PROY"))
+        self.button05.clicked.connect(lambda: self.add_images(self.images_variations[1],"SB_LINEA_PROY"))
+        self.button06.clicked.connect(lambda: self.add_images(self.images_variations[2],"SB_LINEA_PROY"))
+        self.button02.clicked.connect(self.print_all_data_instances)
+        self.button04.clicked.connect(self.cad_plot)
+        #self.button03.clicked.connect(lambda: self.abrir_calc_aisl('CSL-242600-1-06-MC-001.xlsx'))
+        self.button03.clicked.connect(lambda: self.abrir_calc_aisl('CSL-242600-1-06-MC-001.xlsx'))
+        self.borrar.clicked.connect(self.limpiar_dibujo)
+
+    def abrir_calc_aisl(self,file):
+        objeto_hoja_calculo_de_aislamiento(file)
+    
+    def inicializar(self):
+        loadUi("main3.ui", self)            #SVC
+
+    def inversion_ejes(self):
+        transform = QTransform()                             #SVC
+        transform.scale(1, -1)
+        return transform
+
+    def revisar_existencia_de_tabla04(self):
+        if not self.position_table:          #MDELACRUZ
+            print("Error: No se encontró 'tabla04' en main.ui. Verifica el nombre en Qt Designer.") 
+        else:  #MDELACRUZ
+            print("Tabla de posiciones encontrada correctamente.")
         
     def wheelEvent(self, event):             #SVC
         """Manejar el evento de la rueda del mouse para hacer zoom."""
@@ -111,9 +94,6 @@ class MainUI(QMainWindow):
         transform.scale(self.zoom_level, self.zoom_level)
         transform.scale(1, -1)  # Invertir el eje Y
         self.graphicsView.setTransform(transform)
-
-
-        
 
     def initialize_images_variations(self):             #SVC
         bil = 1050
@@ -154,35 +134,36 @@ class MainUI(QMainWindow):
         ]
 
 
-    def add_images(self, images):
-        image_path = os.path.join(os.getcwd(), "SB_LINEA_PROY")
-
+    def add_images(self, images, folder):
+        asd = os.path.join(os.getcwd(), "SB_LINEA_PROY")
+        aux1=[]
         for image in images:
             image_name, _, y_position, inputs, block_type = image
-            
-           
+
             try:
-                pixmap = QPixmap(os.path.join(image_path, image_name)).scaled(85, 40)
-                image_widget = ImageWidget(
-                    image_path=os.path.join(image_path, image_name),
+                pixmap = QPixmap(os.path.join(asd, image_name)).scaled(85, 40)
+                #pixmap = QPixmap(os.path.join(image_widget.image_folder, image_widget.image_name)).scaled(85, 40)
+                image_widget = CADInstance(
+                    image_folder=os.path.join(os.getcwd(),folder),
+                    image_name=image_name,
                     inputs=inputs,
                     main_ui=self,
-                    x=self.d_horizontal,
-                    y=y_position,
+                    x_position=self.d_horizontal,
+                    y_position=y_position,
                     block_type=block_type
                 )
+                
                 image_widget.setPixmap(pixmap)
                 image_widget.setPos(self.d_horizontal, y_position)
                 self.scene.addItem(image_widget)
-            
-
-                # Create a CADInstance and it will be stored in the class variable
-                CADInstance(image_name, self.d_horizontal, y_position, inputs, block_type)
-
+                aux1.append(image_widget)
+                
             except Exception as e:
+                
                 print(f"Error loading image {image_name}: {e}")
         self.d_horizontal += 85  # Update d_horizontal for the next image
-
+        return aux1
+    
     def cad_plot(self):
         self.clear_autocad()  # Limpiar AutoCAD antes de dibujar  #MDELACRUZ
         self.button04.setEnabled(False)  # Disable the plot button
@@ -192,7 +173,8 @@ class MainUI(QMainWindow):
             self.timer.start(100)  # Start the timer
 
             acad = Autocad(create_if_not_exists=True, visible=True)
-            lib_objetos = acad.doc.blocks
+            doc = acad.ActiveDocument
+            lib_objetos = doc.blocks
             listado = [elem.name for elem in lib_objetos]
 
             for instance in CADInstance.all_instances:  # Use class variable
@@ -316,35 +298,86 @@ class MainUI(QMainWindow):
         CADInstance.all_instances = []  # Borra las instancias de AutoCAD
         print("Se ha limpiado el dibujo y el historial.")  #MDELACRUZ
 
-class ImageWidget(QGraphicsPixmapItem):
-    def __init__(self, image_path, inputs, main_ui, x, y, block_type, parent=None):
-        super().__init__(parent)
-        self.cad_instance = CADInstance(
-            image_name=os.path.basename(image_path),
-            x_position=x,
-            y_position=y,
-            inputs=inputs,
-            block_type=block_type
-        )
-  
-        self.main_ui = main_ui
+
+
+    def actualizar_coordenadas(self, event):
+        """Muestra las coordenadas del mouse en label_2 y label_6 en tiempo real."""
+        x = event.x()
+        y = event.y()
+        
+        # Convertir coordenadas del mouse a la escena
+        escena_pos = self.graphicsView.mapToScene(x, y)
+
+        # Convertir valores en texto
+        x_text = f"{escena_pos.x():.2f}"
+        y_text = f"{escena_pos.y():.2f}"
+
+        # Verificar que los labels existen antes de actualizarlos
+        if self.label_2 and self.label_6:
+            self.label_2.setText(f"X: {x_text}")
+            self.label_6.setText(f"Y: {y_text}")
+
+
+    def eventFilter(self, source, event):
+        """ Captura los eventos del mouse dentro de graphicsView """
+        if source == self.graphicsView.viewport() and event.type() == QEvent.MouseMove:
+            self.actualizar_coordenadas(event)
+        return super(MainUI, self).eventFilter(source, event)
+    
+
+class CADInstance(QGraphicsPixmapItem):
+    all_instances = []  # Class variable to store all CAD instances
+    def __init__(self, image_folder, image_name, inputs, main_ui, x_position, y_position, block_type):
+        super().__init__()
+        self.image_folder = image_folder
+        self.image_name=image_name
         self.inputs = inputs
-        self.setPixmap(QPixmap(image_path))
-        self.setPos(x, y)
+        self.main_ui = main_ui
+        self.x_position = x_position
+        self.y_position = y_position
+        self.block_type = block_type
+        self.setPixmap(QPixmap(image_folder))
+        self.setPos(x_position, y_position)
         self.setFlag(QGraphicsItem.ItemIsSelectable, True)
         self.setFlag(QGraphicsItem.ItemIsMovable, True)  # Ensure the item is movable
         self.form_widget = QWidget()
         self.form_layout = QFormLayout()
         self.form_widget.setLayout(self.form_layout)
         self.data = {}
+        # Check for duplicates before appending
+        self.add_instance()
 
         # Connect position synchronization
         self.position_changed()
 
+    def add_instance(self):
+        if not self.is_duplicate():
+            CADInstance.all_instances.append(self)  # Store instance in class variable
+        else:
+            print(f"Duplicate instance not added: {self}")
+
+    def is_duplicate(self):
+        """Check if an instance with the same attributes already exists."""
+        for instance in CADInstance.all_instances:
+            if (instance.image_folder == self.image_folder and
+                instance.image_name == self.image_name and
+                instance.x_position == self.x_position and
+                instance.y_position == self.y_position and
+                instance.block_type == self.block_type and
+                self.inputs == instance.inputs):  # Compare as dictionaries
+                print(f"Duplicate found: {instance} with attributes: "
+                    f"Image Name: {instance.image_name}, "
+                    f"X Position: {instance.x_position}, "
+                    f"Y Position: {instance.y_position}, "
+                    f"Inputs: {instance.inputs}, "
+                    f"Block Type: {instance.block_type}")
+                return True
+        return False
+
     def position_changed(self):
         """Sync QGraphicsItem position with CADInstance data"""
-        self.cad_instance.x_position = self.x()
-        self.cad_instance.y_position = self.y()
+        self.x_position = self.x()
+        self.y_position = self.y()
 
     def itemChange(self, change, value):
         """Handle position updates"""
@@ -363,6 +396,9 @@ class ImageWidget(QGraphicsPixmapItem):
             self.main_ui.update_position_table(self.x(), self.y())  #MDELACRUZ
         super().mousePressEvent(event)  # Call the base class implementation
     
+
+
+
     def set_form_inputs(self):
         self.clear_form_layout()
         for key, value in self.inputs.items():
@@ -392,7 +428,7 @@ class ImageWidget(QGraphicsPixmapItem):
                     self.data[label.text()] = widget.text()
 
         # Update the inputs of the associated CADInstance
-        self.cad_instance.inputs = self.data
+        self.inputs = self.data
         self.form_widget.hide()
         self.show_data()
 
@@ -471,8 +507,41 @@ class ParametrosGenerales(QDialog):
         print("Saved Data:", saved_data)  # Consider replacing with logging
         self.accept()
 
+class objeto_hoja_calculo_de_aislamiento():
+
+    def __init__(self,file):
+        self.file=file
+
+
+        self.excel = win32com.client.Dispatch("Excel.Application")
+        self.hacer_libro_visible()
+
+        self.workbook = self.excel.Workbooks.Open(os.path.join(os.getcwd(),'CSL-242600-1-06-MC-001.xlsx'))
+        self.sheet = self.workbook.Sheets['CA-138kV']
+        self.imprimir_valor()
+        #ãself.escribir_valor()
+        #self.guardar_libro()
+        #self.cerrar_libro()
+        #self.salir_de_aplicacion()
+
+    def hacer_libro_visible(self):
+        self.excel.Visible = True
+    def imprimir_valor(self):
+        #print(self.sheet.Cells(1, 1).Value)
+        print(self.sheet.Range('P15').Value)
+    def escribir_valor(self):
+        self.sheet.Cells(2, 1).Value = "Hello, Excel!"
+    def guardar_libro(self):
+        self.workbook.Save()
+    def cerrar_libro(self):
+        self.workbook.Close()
+
+    def salir_de_aplicacion(self):
+        self.excel.Quit()
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     ui = MainUI()
     ui.show()
+
+    
     sys.exit(app.exec_())
