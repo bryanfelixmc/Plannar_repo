@@ -1,7 +1,7 @@
 from PyQt5.QtWidgets import QMainWindow, QGraphicsItem, QDialog, QApplication, QWidget, QLabel, QPushButton, QGraphicsScene, QGraphicsPixmapItem, QFormLayout, QLineEdit, QWidget, QWidgetItem, QTableWidgetItem, QGraphicsView, QTableWidget,QVBoxLayout
 from PyQt5.uic import loadUi
-from PyQt5.QtGui import QPixmap, QTransform #SVC
-from PyQt5.QtCore import Qt, QTimer, QEvent,QObject
+from PyQt5.QtGui import QPixmap, QTransform,QCursor 
+from PyQt5.QtCore import Qt, QTimer, QEvent,QObject,QPoint
 import sys
 import os
 from pyautocad import Autocad, APoint
@@ -228,27 +228,7 @@ class GraphicsView:
         self.view=existing_view
         self.scene = QGraphicsScene()  # Create the scene here
         self.view.setScene(self.scene)
-
-        # Invert the Y-axis
-        self.view.setTransform(QTransform().scale(1, -1))
-        # Initialize zoom level
-        self.zoom_level = 1.0  
-
-    def wheelEvent(self, event):
-        factor = 1.2 if event.angleDelta().y() > 0 else 0.8
-        self.zoom_level = min(max(self.zoom_level * factor, 1.0), 4.0)
-        self.setTransform(QTransform().scale(self.zoom_level, -self.zoom_level))
-
-    def zoom(self, factor):
-        """Apply the zoom factor to the QGraphicsView."""
-        self.zoom_level *= factor
-        self.zoom_level = min(max(self.zoom_level, 1.0), 4.0)  # Limit zoom between 1.0 and 4.0
-
-        # Apply the zoom transformation
-        transform = QTransform()
-        transform.scale(self.zoom_level, self.zoom_level)
-        transform.scale(1, -1)  # Invert the Y-axis
-        self.setTransform(transform)
+        self.view.setMouseTracking(True)  # Ensure mouse tracking is enabled
 
     def limpiar_dibujo(self):
         """Just clear the scene, let MainUI handle other cleanup"""
@@ -258,26 +238,66 @@ class MouseEventHandler(QObject):
     def __init__(self, main_ui):
         super().__init__(main_ui)  # Call the base class constructor
         self.main_ui = main_ui
-        self.main_ui.graphics_view.view.setMouseTracking(True)
-        self.main_ui.graphics_view.view.viewport().installEventFilter(self)
+        self.view = main_ui.graphics_view.view
+        self.view.setMouseTracking(True)
+        self.view.viewport().installEventFilter(self)
+        self.zoom_level = 1.0
+        self.is_panning = False
+        self.pan_start_pos = QPoint()
+        self.apply_zoom_transform()
 
-    def actualizar_coordenadas(self, event):
-        """Muestra las coordenadas del mouse en label_2 y label_6 en tiempo real."""
-        x = event.x()
-        y = event.y()
-        
-        # Convertir coordenadas del mouse a la escena
-        escena_pos = self.main_ui.graphics_view.view.mapToScene(x, y)
-
-        # Update labels
-        self.main_ui.label_2.setText(f"X: {escena_pos.x():.2f}")
-        self.main_ui.label_6.setText(f"Y: {escena_pos.y():.2f}")
 
     def eventFilter(self, source, event):
-        """ Captura los eventos del mouse dentro de graphicsView """
-        if source == self.main_ui.graphics_view.view.viewport() and event.type() == QEvent.MouseMove:
-            self.actualizar_coordenadas(event)
-        return super(MouseEventHandler, self).eventFilter(source, event)
+        if source == self.view.viewport():
+            if event.type() == QEvent.MouseButtonPress and event.button() == Qt.MiddleButton:
+                self.start_panning(event.pos())
+                return True
+                
+            if event.type() == QEvent.MouseMove:
+                self.update_coordinates(event)
+                if self.is_panning:
+                    self.handle_panning(event.pos())
+                    return True
+                    
+            if event.type() == QEvent.MouseButtonRelease and event.button() == Qt.MiddleButton:
+                self.stop_panning()
+                return True
+
+            if event.type() == QEvent.Wheel:
+                self.handle_wheel(event)
+                return True
+                
+        return super().eventFilter(source, event)
+    
+    def start_panning(self, pos):
+        self.is_panning = True
+        self.pan_start_pos = pos
+        self.view.setCursor(Qt.ClosedHandCursor)
+
+    def stop_panning(self):
+        self.is_panning = False
+        self.view.setCursor(Qt.ArrowCursor)
+
+    def handle_panning(self, current_pos):
+        delta = current_pos - self.pan_start_pos
+        self.pan_start_pos = current_pos
+        self.view.horizontalScrollBar().setValue(self.view.horizontalScrollBar().value() - delta.x())
+        self.view.verticalScrollBar().setValue(self.view.verticalScrollBar().value() - delta.y())
+
+    def handle_wheel(self, event):
+        factor = 1.1 if event.angleDelta().y() > 0 else 0.9
+        self.zoom_level = min(max(self.zoom_level * factor, 0.1), 10.0)
+        self.apply_zoom_transform()
+
+    def apply_zoom_transform(self):
+        transform = QTransform().scale(self.zoom_level, -self.zoom_level)
+        self.view.setTransform(transform)
+
+    def update_coordinates(self, event):
+        scene_pos = self.view.mapToScene(event.pos())
+        self.main_ui.label_2.setText(f"X: {scene_pos.x():.2f}")
+        self.main_ui.label_6.setText(f"Y: {scene_pos.y():.2f}")
+
 
 class CADInstance(QGraphicsPixmapItem):
     all_instances = []  # Class variable to store all CAD instances
