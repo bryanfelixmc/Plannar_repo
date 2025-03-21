@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1046</width>
-    <height>818</height>
+    <width>1076</width>
+    <height>892</height>
    </rect>
   </property>
   <property name="mouseTracking">
@@ -71,7 +71,7 @@
       <x>10</x>
       <y>270</y>
       <width>211</width>
-      <height>211</height>
+      <height>301</height>
      </rect>
     </property>
     <column>
@@ -89,7 +89,7 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>520</y>
+      <y>600</y>
       <width>211</width>
       <height>101</height>
      </rect>
@@ -128,19 +128,19 @@
    <widget class="QGraphicsView" name="graphicsView">
     <property name="geometry">
      <rect>
-      <x>250</x>
-      <y>60</y>
+      <x>260</x>
+      <y>150</y>
       <width>761</width>
-      <height>661</height>
+      <height>641</height>
      </rect>
     </property>
    </widget>
    <widget class="QProgressBar" name="progressBar">
     <property name="geometry">
      <rect>
-      <x>567</x>
-      <y>730</y>
-      <width>451</width>
+      <x>677</x>
+      <y>810</y>
+      <width>341</width>
       <height>23</height>
      </rect>
     </property>
@@ -155,7 +155,7 @@
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>640</y>
+      <y>720</y>
       <width>171</width>
       <height>101</height>
      </rect>
@@ -170,8 +170,8 @@
    <widget class="QLabel" name="label2">
     <property name="geometry">
      <rect>
-      <x>480</x>
-      <y>730</y>
+      <x>590</x>
+      <y>810</y>
       <width>71</width>
       <height>21</height>
      </rect>
@@ -202,60 +202,6 @@
      <string>Caracteristicas:</string>
     </property>
    </widget>
-   <widget class="QWidget" name="gridLayoutWidget_2">
-    <property name="geometry">
-     <rect>
-      <x>20</x>
-      <y>50</y>
-      <width>201</width>
-      <height>151</height>
-     </rect>
-    </property>
-    <layout class="QGridLayout" name="gridLayout_2">
-     <item row="2" column="0">
-      <widget class="QPushButton" name="button03">
-       <property name="text">
-        <string>abrir_excel</string>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="0">
-      <widget class="QPushButton" name="button01">
-       <property name="text">
-        <string>bay_up</string>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="1">
-      <widget class="QPushButton" name="button05">
-       <property name="text">
-        <string>bay_down</string>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="1">
-      <widget class="QPushButton" name="button06">
-       <property name="text">
-        <string>bay_type_3</string>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="0">
-      <widget class="QPushButton" name="button02">
-       <property name="text">
-        <string>show_data</string>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="1">
-      <widget class="QPushButton" name="button04">
-       <property name="text">
-        <string>plot</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </widget>
    <widget class="QLabel" name="label_3">
     <property name="geometry">
      <rect>
@@ -282,7 +228,7 @@
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>490</y>
+      <y>570</y>
       <width>131</width>
       <height>31</height>
      </rect>
@@ -300,48 +246,14 @@
      <string>Posición:</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="button_prev">
-    <property name="geometry">
-     <rect>
-      <x>890</x>
-      <y>20</y>
-      <width>41</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>&lt;-</string>
-    </property>
-    <property name="icon">
-     <iconset>
-      <normaloff>../icono_retroceder.png</normaloff>../icono_retroceder.png</iconset>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="button_next">
-    <property name="geometry">
-     <rect>
-      <x>940</x>
-      <y>20</y>
-      <width>41</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>-&gt;</string>
-    </property>
-    <property name="icon">
-     <iconset>
-      <normaloff>../icono_avanzarr.jpg</normaloff>../icono_avanzarr.jpg</iconset>
-    </property>
-   </widget>
    <widget class="QPushButton" name="borrar">
     <property name="enabled">
      <bool>true</bool>
     </property>
     <property name="geometry">
      <rect>
-      <x>810</x>
-      <y>20</y>
+      <x>950</x>
+      <y>110</y>
       <width>71</width>
       <height>31</height>
      </rect>
@@ -368,7 +280,7 @@
     <property name="geometry">
      <rect>
       <x>250</x>
-      <y>730</y>
+      <y>810</y>
       <width>61</width>
       <height>21</height>
      </rect>
@@ -381,7 +293,7 @@
     <property name="geometry">
      <rect>
       <x>370</x>
-      <y>730</y>
+      <y>810</y>
       <width>71</width>
       <height>21</height>
      </rect>
@@ -390,13 +302,838 @@
      <string>y:</string>
     </property>
    </widget>
+   <widget class="QStackedWidget" name="stackedWidget">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>40</y>
+      <width>231</width>
+      <height>201</height>
+     </rect>
+    </property>
+    <property name="currentIndex">
+     <number>0</number>
+    </property>
+    <widget class="QWidget" name="AIS_Simple_Barra">
+     <widget class="QWidget" name="gridLayoutWidget_2">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>30</y>
+        <width>161</width>
+        <height>152</height>
+       </rect>
+      </property>
+      <layout class="QGridLayout" name="gridLayout_2">
+       <item row="5" column="1">
+        <widget class="QPushButton" name="button04">
+         <property name="text">
+          <string>plot</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="0">
+        <widget class="QPushButton" name="button03">
+         <property name="text">
+          <string>abrir_excel</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QPushButton" name="button01">
+         <property name="text">
+          <string>bay_down</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="QPushButton" name="button05">
+         <property name="text">
+          <string>bay_up</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="1">
+        <widget class="QPushButton" name="button02">
+         <property name="text">
+          <string>show_data</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0">
+        <widget class="QPushButton" name="button06">
+         <property name="text">
+          <string>bay_</string>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="0">
+        <widget class="QPushButton" name="pushButton_3">
+         <property name="text">
+          <string>_</string>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="1">
+        <widget class="QPushButton" name="pushButton_4">
+         <property name="text">
+          <string>_</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QLabel" name="label_8">
+      <property name="geometry">
+       <rect>
+        <x>50</x>
+        <y>10</y>
+        <width>121</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>AIS - SIMPLE BARRA</string>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="AIS_Doble_Barra">
+     <widget class="QWidget" name="gridLayoutWidget_5">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>30</y>
+        <width>181</width>
+        <height>152</height>
+       </rect>
+      </property>
+      <layout class="QGridLayout" name="gridLayout_5">
+       <item row="3" column="1">
+        <widget class="QPushButton" name="pushButton_31">
+         <property name="text">
+          <string>plot</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="0">
+        <widget class="QPushButton" name="pushButton_25">
+         <property name="text">
+          <string>_</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0">
+        <widget class="QPushButton" name="pushButton_26">
+         <property name="text">
+          <string>abrir_excel</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="0">
+        <widget class="QPushButton" name="pushButton_28">
+         <property name="text">
+          <string>bay_up</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QPushButton" name="pushButton_29">
+         <property name="text">
+          <string>bay_down</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="1">
+        <widget class="QPushButton" name="pushButton_32">
+         <property name="text">
+          <string>_</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QPushButton" name="pushButton_30">
+         <property name="text">
+          <string>bay_TP</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QPushButton" name="pushButton_27">
+         <property name="text">
+          <string>show_data</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QLabel" name="label_7">
+      <property name="geometry">
+       <rect>
+        <x>50</x>
+        <y>10</y>
+        <width>111</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>AIS - DOBLE BARRA</string>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="AIS_DB_Y_SEC_TRANSF">
+     <widget class="QWidget" name="gridLayoutWidget_6">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>40</y>
+        <width>181</width>
+        <height>152</height>
+       </rect>
+      </property>
+      <layout class="QGridLayout" name="gridLayout_6">
+       <item row="0" column="0">
+        <widget class="QPushButton" name="pushButton_36">
+         <property name="text">
+          <string>bay_up</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="0">
+        <widget class="QPushButton" name="pushButton_33">
+         <property name="text">
+          <string>_</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0">
+        <widget class="QPushButton" name="pushButton_34">
+         <property name="text">
+          <string>abrir_excel</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QPushButton" name="pushButton_37">
+         <property name="text">
+          <string>bay_down</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="1">
+        <widget class="QPushButton" name="pushButton_39">
+         <property name="text">
+          <string>plot</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="1">
+        <widget class="QPushButton" name="pushButton_40">
+         <property name="text">
+          <string>_</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QPushButton" name="pushButton_38">
+         <property name="text">
+          <string>bay_acople</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QPushButton" name="pushButton_35">
+         <property name="text">
+          <string>show_data</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QLabel" name="label_9">
+      <property name="geometry">
+       <rect>
+        <x>50</x>
+        <y>9</y>
+        <width>131</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>AIS - DOBLE BARRA + SECC TRANSF.</string>
+      </property>
+      <property name="textFormat">
+       <enum>Qt::AutoText</enum>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+      <property name="wordWrap">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="AIS_Interruptor_medio">
+     <widget class="QWidget" name="gridLayoutWidget_7">
+      <property name="geometry">
+       <rect>
+        <x>30</x>
+        <y>30</y>
+        <width>161</width>
+        <height>152</height>
+       </rect>
+      </property>
+      <layout class="QGridLayout" name="gridLayout_7">
+       <item row="3" column="1">
+        <widget class="QPushButton" name="pushButton_41">
+         <property name="text">
+          <string>-</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="QPushButton" name="pushButton_42">
+         <property name="text">
+          <string>abrir_excel</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="2">
+        <widget class="QPushButton" name="pushButton_45">
+         <property name="text">
+          <string>bay_down</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QPushButton" name="pushButton_44">
+         <property name="text">
+          <string>bay_up</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="2">
+        <widget class="QPushButton" name="pushButton_47">
+         <property name="text">
+          <string>plot</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="2">
+        <widget class="QPushButton" name="pushButton_48">
+         <property name="text">
+          <string>-</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="2">
+        <widget class="QPushButton" name="pushButton_43">
+         <property name="text">
+          <string>show_data</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QPushButton" name="pushButton_46">
+         <property name="text">
+          <string>bay_acople</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QLabel" name="label_10">
+      <property name="geometry">
+       <rect>
+        <x>60</x>
+        <y>10</y>
+        <width>131</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>AIS - INT. Y MEDIO</string>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="GIS_Simple_Barra">
+     <widget class="QWidget" name="gridLayoutWidget_3">
+      <property name="geometry">
+       <rect>
+        <x>30</x>
+        <y>30</y>
+        <width>161</width>
+        <height>152</height>
+       </rect>
+      </property>
+      <layout class="QGridLayout" name="gridLayout_3">
+       <item row="5" column="1">
+        <widget class="QPushButton" name="button04_2">
+         <property name="text">
+          <string>plot</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="0">
+        <widget class="QPushButton" name="button03_2">
+         <property name="text">
+          <string>abrir_excel</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QPushButton" name="button01_2">
+         <property name="text">
+          <string>bay_down</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="QPushButton" name="button05_2">
+         <property name="text">
+          <string>bay_up</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="1">
+        <widget class="QPushButton" name="button02_2">
+         <property name="text">
+          <string>show_data</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0">
+        <widget class="QPushButton" name="button06_2">
+         <property name="text">
+          <string>bay_</string>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="0">
+        <widget class="QPushButton" name="pushButton_5">
+         <property name="text">
+          <string>_</string>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="1">
+        <widget class="QPushButton" name="pushButton_6">
+         <property name="text">
+          <string>_</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QLabel" name="label_11">
+      <property name="geometry">
+       <rect>
+        <x>60</x>
+        <y>10</y>
+        <width>121</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>GIS - SIMPLE BARRA</string>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="GIS_Doble_Barra">
+     <widget class="QWidget" name="gridLayoutWidget_4">
+      <property name="geometry">
+       <rect>
+        <x>30</x>
+        <y>30</y>
+        <width>161</width>
+        <height>152</height>
+       </rect>
+      </property>
+      <layout class="QGridLayout" name="gridLayout_4">
+       <item row="5" column="1">
+        <widget class="QPushButton" name="button04_3">
+         <property name="text">
+          <string>plot</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="0">
+        <widget class="QPushButton" name="button03_3">
+         <property name="text">
+          <string>abrir_excel</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QPushButton" name="button01_3">
+         <property name="text">
+          <string>bay_down</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="QPushButton" name="button05_3">
+         <property name="text">
+          <string>bay_up</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="1">
+        <widget class="QPushButton" name="button02_3">
+         <property name="text">
+          <string>show_data</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0">
+        <widget class="QPushButton" name="button06_3">
+         <property name="text">
+          <string>bay_</string>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="0">
+        <widget class="QPushButton" name="pushButton_7">
+         <property name="text">
+          <string>_</string>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="1">
+        <widget class="QPushButton" name="pushButton_8">
+         <property name="text">
+          <string>_</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QLabel" name="label_12">
+      <property name="geometry">
+       <rect>
+        <x>60</x>
+        <y>10</y>
+        <width>111</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>GIS - DOBLE BARRA</string>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="GIS_DB_Y_SEC_TRANSF">
+     <widget class="QWidget" name="gridLayoutWidget_8">
+      <property name="geometry">
+       <rect>
+        <x>30</x>
+        <y>40</y>
+        <width>161</width>
+        <height>152</height>
+       </rect>
+      </property>
+      <layout class="QGridLayout" name="gridLayout_8">
+       <item row="5" column="1">
+        <widget class="QPushButton" name="button04_4">
+         <property name="text">
+          <string>plot</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="0">
+        <widget class="QPushButton" name="button03_4">
+         <property name="text">
+          <string>abrir_excel</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QPushButton" name="button01_4">
+         <property name="text">
+          <string>bay_down</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="QPushButton" name="button05_4">
+         <property name="text">
+          <string>bay_up</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="1">
+        <widget class="QPushButton" name="button02_4">
+         <property name="text">
+          <string>show_data</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0">
+        <widget class="QPushButton" name="button06_4">
+         <property name="text">
+          <string>bay_</string>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="0">
+        <widget class="QPushButton" name="pushButton_9">
+         <property name="text">
+          <string>_</string>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="1">
+        <widget class="QPushButton" name="pushButton_10">
+         <property name="text">
+          <string>_</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QLabel" name="label_13">
+      <property name="geometry">
+       <rect>
+        <x>50</x>
+        <y>10</y>
+        <width>131</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>GIS - DOBLE BARRA + SECC TRANSF.</string>
+      </property>
+      <property name="textFormat">
+       <enum>Qt::AutoText</enum>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+      <property name="wordWrap">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="GIS_Interruptor_medio">
+     <widget class="QWidget" name="gridLayoutWidget_9">
+      <property name="geometry">
+       <rect>
+        <x>30</x>
+        <y>30</y>
+        <width>161</width>
+        <height>152</height>
+       </rect>
+      </property>
+      <layout class="QGridLayout" name="gridLayout_9">
+       <item row="5" column="1">
+        <widget class="QPushButton" name="button04_5">
+         <property name="text">
+          <string>plot</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="0">
+        <widget class="QPushButton" name="button03_5">
+         <property name="text">
+          <string>abrir_excel</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QPushButton" name="button01_5">
+         <property name="text">
+          <string>bay_down</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="QPushButton" name="button05_5">
+         <property name="text">
+          <string>bay_up</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="1">
+        <widget class="QPushButton" name="button02_5">
+         <property name="text">
+          <string>show_data</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0">
+        <widget class="QPushButton" name="button06_5">
+         <property name="text">
+          <string>bay_</string>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="0">
+        <widget class="QPushButton" name="pushButton_11">
+         <property name="text">
+          <string>_</string>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="1">
+        <widget class="QPushButton" name="pushButton_12">
+         <property name="text">
+          <string>_</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QLabel" name="label_14">
+      <property name="geometry">
+       <rect>
+        <x>50</x>
+        <y>10</y>
+        <width>131</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>GIS - INT. Y  MEDIO</string>
+      </property>
+     </widget>
+    </widget>
+   </widget>
+   <widget class="QFrame" name="frame">
+    <property name="geometry">
+     <rect>
+      <x>280</x>
+      <y>10</y>
+      <width>361</width>
+      <height>141</height>
+     </rect>
+    </property>
+    <property name="frameShape">
+     <enum>QFrame::StyledPanel</enum>
+    </property>
+    <property name="frameShadow">
+     <enum>QFrame::Raised</enum>
+    </property>
+    <widget class="QWidget" name="verticalLayoutWidget">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>40</y>
+       <width>64</width>
+       <height>80</height>
+      </rect>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout">
+      <item>
+       <widget class="QRadioButton" name="boton_AIS">
+        <property name="text">
+         <string>AIS</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QRadioButton" name="boton_GIS">
+        <property name="text">
+         <string>GIS</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+    <widget class="QWidget" name="verticalLayoutWidget_2">
+     <property name="geometry">
+      <rect>
+       <x>80</x>
+       <y>40</y>
+       <width>197</width>
+       <height>88</height>
+      </rect>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout_2">
+      <item>
+       <widget class="QRadioButton" name="boton_SB">
+        <property name="text">
+         <string>Simple barra</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QRadioButton" name="boton_DB">
+        <property name="text">
+         <string>Doble barra</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QRadioButton" name="boton_DBySECTRANSF">
+        <property name="text">
+         <string>Doble barra + sec. de transferencia</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QRadioButton" name="boton_INTyMEDIO">
+        <property name="text">
+         <string>Interruptor y medio</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+    <widget class="QPushButton" name="pushButton">
+     <property name="geometry">
+      <rect>
+       <x>280</x>
+       <y>70</y>
+       <width>61</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Aplicar</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_5">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>0</y>
+       <width>131</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>MS Sans Serif</family>
+       <pointsize>10</pointsize>
+       <weight>75</weight>
+       <bold>true</bold>
+       <underline>true</underline>
+      </font>
+     </property>
+     <property name="text">
+      <string>Tipo:</string>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QLabel" name="label_zoom">
+    <property name="geometry">
+     <rect>
+      <x>470</x>
+      <y>810</y>
+      <width>91</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>zoom:</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1046</width>
+     <width>1076</width>
      <height>21</height>
     </rect>
    </property>
@@ -406,7 +1143,7 @@
     </property>
     <addaction name="actionParametros_generales"/>
     <addaction name="actionCondiciones_ambientales"/>
-    <addaction name="actionInformaci_n_del_sistema"/>
+    <addaction name="actionInformacion_del_sistema"/>
     <addaction name="actionResponsables"/>
     <addaction name="actionDimensiones_de_SE"/>
     <addaction name="actionAbrir"/>
@@ -461,7 +1198,7 @@
     <string>Condiciones ambientales</string>
    </property>
   </action>
-  <action name="actionInformaci_n_del_sistema">
+  <action name="actionInformacion_del_sistema">
    <property name="text">
     <string>Parámetros eléctricos</string>
    </property>
