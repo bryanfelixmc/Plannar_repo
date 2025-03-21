@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QMainWindow, QGraphicsItem, QDialog, QApplication, QWidget, QLabel, QPushButton, QGraphicsScene, QGraphicsPixmapItem, QFormLayout, QLineEdit, QWidget, QWidgetItem, QTableWidgetItem, QGraphicsView, QTableWidget,QVBoxLayout
+from PyQt5.QtWidgets import QMainWindow, QGraphicsItem, QDialog, QApplication, QWidget, QLabel, QPushButton, QGraphicsScene, QGraphicsPixmapItem, QFormLayout, QLineEdit, QWidget, QWidgetItem, QTableWidgetItem, QGraphicsView, QTableWidget,QVBoxLayout,QGraphicsLineItem, QGraphicsTextItem
 from PyQt5.uic import loadUi
 from PyQt5.QtGui import QPixmap, QTransform,QCursor 
 from PyQt5.QtCore import Qt, QTimer, QEvent,QObject,QPoint
@@ -10,6 +10,7 @@ import pandas as pd
 import win32com.client
 
 class MainUI(QMainWindow):
+    
     def __init__(self):
         super().__init__()
         self.inicializar() 
@@ -18,13 +19,22 @@ class MainUI(QMainWindow):
         self.timer = QTimer()
         # Initializa las imagenes
         self.images_variations = self.initialize_images_variations()
+        #Inicializa la clase GraphicsView, como el objeto graphicsView que actualmente existe en el MainUI.
         self.graphics_view = GraphicsView(self.graphicsView)
         # Create an instance of MouseEventHandler
         self.mouse_event_handler = MouseEventHandler(self)
         # Connect buttons to their respective methods
         self.activar_botones()
-        # Connect menu action
-        self.actionParametros_generales.triggered.connect(self.show_parametros_generales)
+        # Conectar cada opcion del menu de acciones (parte superior)
+        self.dict_informacion_del_proyecto={}
+        self.actionParametros_generales.triggered.connect(lambda: self.informacion_del_proyecto(self.dict_informacion_del_proyecto))
+        self.dict_condiciones_ambientales={}
+        self.actionCondiciones_ambientales.triggered.connect(lambda: self.show_Condiciones_ambientales(self.dict_condiciones_ambientales))
+        self.dict_informacion_del_sistema={}
+        self.actionInformacion_del_sistema.triggered.connect(lambda: self.show_Informacion_del_sistema(self.dict_informacion_del_sistema))
+        self.dict_responsables={}
+        self.actionResponsables.triggered.connect(lambda: self.show_Responsables(self.dict_responsables))
+
     def activar_botones(self):
         self.button01.clicked.connect(lambda: self.add_images(self.images_variations[0],"SB_LINEA_PROY"))### aqui deberia ir el nuevo objeto sb_bay_line()
         self.button05.clicked.connect(lambda: self.add_images(self.images_variations[1],"SB_LINEA_PROY"))
@@ -33,7 +43,39 @@ class MainUI(QMainWindow):
         self.button04.clicked.connect(self.cad_plot)
         self.button03.clicked.connect(lambda: self.abrir_calc_aisl('CSL-242600-1-06-MC-001.xlsx'))
         self.borrar.clicked.connect(self.limpiar_dibujo)
+        self.pushButton.clicked.connect(self.cambiar_tipologia_subestacion)
 
+
+        #self.pushButton_3.clicked.connect(lambda: self.imprimir_2(self.dict_responsables))
+ 
+    #def imprimir_2(self,valor):
+    #    print(valor)
+    
+    def cambiar_tipologia_subestacion(self):
+        #AIS
+        if self.boton_AIS.isChecked() and self.boton_SB.isChecked():
+            self.stackedWidget.setCurrentWidget(self.AIS_Simple_Barra)
+        elif self.boton_AIS.isChecked() and self.boton_DB.isChecked():
+            self.stackedWidget.setCurrentWidget(self.AIS_Doble_Barra)
+        elif self.boton_AIS.isChecked() and self.boton_DBySECTRANSF.isChecked():
+            self.stackedWidget.setCurrentWidget(self.AIS_DB_Y_SEC_TRANSF)
+        elif self.boton_AIS.isChecked() and self.boton_INTyMEDIO.isChecked():
+            self.stackedWidget.setCurrentWidget(self.AIS_Interruptor_medio)
+        
+        #GIS
+        elif self.boton_GIS.isChecked() and self.boton_SB.isChecked():
+            self.stackedWidget.setCurrentWidget(self.GIS_Simple_Barra)
+        elif self.boton_GIS.isChecked() and self.boton_DB.isChecked():
+            self.stackedWidget.setCurrentWidget(self.GIS_Doble_Barra)
+        elif self.boton_GIS.isChecked() and self.boton_DBySECTRANSF.isChecked():
+            self.stackedWidget.setCurrentWidget(self.GIS_DB_Y_SEC_TRANSF)
+        elif self.boton_GIS.isChecked() and self.boton_INTyMEDIO.isChecked():
+            self.stackedWidget.setCurrentWidget(self.GIS_Interruptor_medio)
+        
+        else:
+            pass
+            
+   
     def abrir_calc_aisl(self,file):
         objeto_hoja_calculo_de_aislamiento(file)
     
@@ -43,27 +85,27 @@ class MainUI(QMainWindow):
     def initialize_images_variations(self):             #SVC
         bil = 1050
         return [
-            # Variation 1
+            # Variation 1  bay_down
             [
-                ["LL__LINEA_PROY_DWN.jpg", 0, 280+280, {"Carga (MW)": 0, "Nombre": 0, "Codigo de Linea": 0}, "SALIDA_LINEA"],
+                ["LL__LINEA_PROY_DWN.jpg", 0, 280+280, {"Carga (MW)": 0, "Nombre": 0, "Codigo de Linea": 0}, "SALIDA_LINEA_DWN"],
                 ["PR__LINEA_PROY.jpg", 0, 280+240, {"Tension nominal (kV)": 0, "BIL (kVp)": bil, "I nominal (A)": 0, "Clase": 0}, "Pararrayos c-cd1"],
                 ["TTC_LINEA_PROY.jpg", 0, 280+200, {"Tension nominal (kV)": 0, "BIL (kVp)": bil, "Clase de Proteccion": 0, "Tipo": 0}, "TTC_AT_2S"],
                 ["SL__LINEA_PROY.jpg", 0, 280+160, {"Tension nominal (kV)": 0, "BIL (kVp)": bil, "I nominal (A)": 0, "Tipo": 0}, "SL_AT_AV_DOWN1"],
                 ["TC__LINEA_PROY.jpg", 0, 280+120, {"Tension nominal (kV)": 0, "BIL (kVp)": bil, "I nominal (A)": 0, "Tipo": 0, "Relacion devanado primario": 0, "Relacion devanado secundario": 0, "Burden": 0}, "CT_AT_4S"],
                 ["IP__LINEA_PROY.jpg", 0, 280+80, {"Tension nominal (kV)": 0, "BIL (kVp)": bil, "I nominal (A)": 0}, "IP_AT"],
-                ["SB__LINEA_PROY_DWN.jpg", 0, 280+40, {"Tension nominal (kV)": 0, "BIL (kVp)": bil, "I nominal (A)": 0, "Tipo": 0}, "SB_AT_AC"],
+                ["SB__LINEA_PROY_DWN.jpg", 0, 280+40, {"Tension nominal (kV)": 0, "BIL (kVp)": bil, "I nominal (A)": 0, "Tipo": 0}, "SB_AT_AC_DOWN"],
             ],
 
-            # Variation 2
+            # Variation 2   bay_up
 
             [
-                ["LL__LINEA_PROY.jpg", 0, 40, {"Carga (MW)": 0, "Nombre": 0, "Codigo de Linea": 0}, "SALIDA_LINEA_DWN"],
+                ["LL__LINEA_PROY.jpg", 0, 40, {"Carga (MW)": 0, "Nombre": 0, "Codigo de Linea": 0}, "SALIDA_LINEA"],
                 ["PR__LINEA_PROY.jpg", 0, 80, {"Tension nominal (kV)": 0, "BIL (kVp)": bil, "I nominal (A)": 0, "Clase": 0,}, "Pararrayos c-cd1"],
                 ["TTC_LINEA_PROY.jpg", 0, 120, {"Tension nominal (kV)": 0, "BIL (kVp)": bil, "Clase de Proteccion": 0, "Tipo": 0}, "TTC_AT_2S"],
                 ["SL__LINEA_PROY.jpg", 0, 160, {"Tension nominal (kV)": 0, "BIL (kVp)": bil, "I nominal (A)": 0, "Tipo": 0}, "SL_AT_AV_DOWN2"],
                 ["TC__LINEA_PROY.jpg", 0, 200, {"Tension nominal (kV)": 0, "BIL (kVp)": bil, "I nominal (A)": 0, "Tipo": 0, "Relacion devanado primario": 0, "Relacion devanado secundario": 0, "Burden": 0}, "CT_AT_4S_DOWN"],
                 ["IP__LINEA_PROY.jpg", 0, 240, {"Tension nominal (kV)": 0, "BIL (kVp)": bil, "I nominal (A)": 0}, "IP_AT_DOWN"],
-                ["SB__LINEA_PROY.jpg", 0, 280, {"Tension nominal (kV)": 0, "BIL (kVp)": bil, "I nominal (A)": 0, "Tipo": 0}, "SB_AT_AC_DOWN"],
+                ["SB__LINEA_PROY.jpg", 0, 280, {"Tension nominal (kV)": 0, "BIL (kVp)": bil, "I nominal (A)": 0, "Tipo": 0}, "SB_AT_AC"],
             ],
 
             # Variation 3
@@ -100,6 +142,14 @@ class MainUI(QMainWindow):
                 image_widget.setPixmap(pixmap)
                 image_widget.setPos(self.d_horizontal, y_position)
                 self.graphics_view.scene.addItem(image_widget)
+
+
+                # Scroll the view to the position of the newly added image
+                #self.graphics_view.view.horizontalScrollBar().setValue(self.d_horizontal)
+                #self.graphics_view.view.verticalScrollBar().setValue(y_position)
+                
+                self.graphics_view.view.horizontalScrollBar().setValue(-25)
+                self.graphics_view.view.verticalScrollBar().setValue(-25)
                 aux1.append(image_widget)
             except Exception as e:
                 
@@ -191,15 +241,69 @@ class MainUI(QMainWindow):
             # Print the DataFrame as a table
             print(df)#.to_string(index=False))  # Use to_string to format the output nicely
 
-    def show_parametros_generales(self):
+    def informacion_del_proyecto(self,current_dict={}):
         some_dictionary = {
-            "Parameter 1": "Value 1",
-            "Parameter 2": "Value 2",
-            "Parameter 3": "Value 3"
+            "Nombre de la Subestación Eléctrica     ": "Value 1",
+            "Ubicacion - Pais              ": "Value 2",
+            "Ubicacion - Departamento                  ": "Value 3",
+            "Ubicacion - Distrito                  ": "Value 4",
         }
+
+        # If current_dict is provided and not empty, update some_dictionary with its keys and values
+        if current_dict:
+            some_dictionary = {key: current_dict[key] for key in current_dict.keys()}
+
         self.parametros_widget = ParametrosGenerales(some_dictionary, self)
-        self.parametros_widget.setWindowTitle("General Parameters")
-        self.parametros_widget.resize(400, 300)
+        self.dict_informacion_del_proyecto=self.parametros_widget.saved_data
+        self.parametros_widget.setWindowTitle("informacion del proyecto")
+        self.parametros_widget.exec_()
+        
+    def show_Condiciones_ambientales(self,current_dict={}):
+        some_dictionary = {
+            "Altura sobre el nivel del mar   (m.s.n.m.)": "Value 1",
+            "Temperatura promedio            (°C)      ": "Value 2",
+            "Nivel de descarga tipo rayo               ": "Value 3",
+            "Resistividad del terreno            (Ω)   ": "Value 4",
+            "Grado de contaminación ambiental          ": "Value 4",
+            "Humedad Relativa                      (%) ": "Value 5"
+        }
+        # If current_dict is provided and not empty, update some_dictionary with its keys and values
+        if current_dict:
+            some_dictionary = {key: current_dict[key] for key in current_dict.keys()}
+        
+        self.parametros_widget = ParametrosGenerales(some_dictionary, self)
+        self.dict_condiciones_ambientales=self.parametros_widget.saved_data
+        self.parametros_widget.setWindowTitle("Condiciones ambientales")
+        self.parametros_widget.exec_()
+
+    def show_Informacion_del_sistema(self,current_dict={}):
+        some_dictionary = {
+            "Tensión                                       (kV) ": "Value 1",
+            "Frecuencia                                 (Hz) ": "60",
+            "Corriente de cortocircuito     (kA) ": "Value 3"
+        }
+        # If current_dict is provided and not empty, update some_dictionary with its keys and values
+        if current_dict:
+            some_dictionary = {key: current_dict[key] for key in current_dict.keys()}
+
+        self.parametros_widget = ParametrosGenerales(some_dictionary, self)
+        self.dict_informacion_del_sistema=self.parametros_widget.saved_data
+        self.parametros_widget.setWindowTitle("Informacion del sistema")
+        self.parametros_widget.exec_()
+
+    def show_Responsables(self,current_dict={}):
+        some_dictionary = {
+            "Jefe del Proyecto          ": "Value 1",
+            "Elaborado por              ": "Value 2",
+            "Revisado por               ": "Value 3"
+        }
+        # If current_dict is provided and not empty, update some_dictionary with its keys and values
+        if current_dict:
+            some_dictionary = {key: current_dict[key] for key in current_dict.keys()}
+
+        self.parametros_widget = ParametrosGenerales(some_dictionary, self)
+        self.dict_responsables=self.parametros_widget.saved_data
+        self.parametros_widget.setWindowTitle("Responsables")
         self.parametros_widget.exec_()
     
     def clear_autocad(self):   #MDELACRUZ
@@ -212,13 +316,16 @@ class MainUI(QMainWindow):
             for obj in list(doc.ModelSpace):
                 obj.Delete()
         
-            acad.ZoomAll()  # Ajustar la vista
-            print("AutoCAD ha sido limpiado correctamente.")  #MDELACRUZ
+            # Use SendCommand to execute the Zoom All command
+            #acad.doc.SendCommand("_.zoom _a ")  # The command to zoom all
+        
+            print("Cleaning & Ploting again...")  #MDELACRUZ
         except Exception as e:
             print(f"Error al limpiar AutoCAD: {e}")
 
     def limpiar_dibujo(self):
         self.graphics_view.scene.clear()
+        self.graphics_view.draw_axes()
         self.d_horizontal = 0
         CADInstance.all_instances = []
         print("Se ha limpiado el dibujo y el historial.")
@@ -229,10 +336,56 @@ class GraphicsView:
         self.scene = QGraphicsScene()  # Create the scene here
         self.view.setScene(self.scene)
         self.view.setMouseTracking(True)  # Ensure mouse tracking is enabled
+        #Dibuja los ejes de coordenadas
+        self.draw_axes()
 
     def limpiar_dibujo(self):
         """Just clear the scene, let MainUI handle other cleanup"""
         self.scene.clear()
+
+
+    def draw_axes(self):
+        """Draw infinite X and Y axes centered at (0, 0)."""
+        # Clear existing axes
+        self.limpiar_dibujo()
+
+        # Define a large value for the axes to appear infinite
+        large_value = 10000  # Adjust this value as needed
+
+        # Draw X axis (infinite line)
+        x_axis = QGraphicsLineItem(-large_value, 0, large_value, 0)
+        self.scene.addItem(x_axis)
+
+        # Draw Y axis (infinite line)
+        y_axis = QGraphicsLineItem(0, -large_value, 0, large_value)
+        self.scene.addItem(y_axis)
+
+        # Set the pen color and width for the X axis (red)
+        x_pen = x_axis.pen()
+        x_pen.setColor(Qt.red)  # Set the color to red
+        x_pen.setWidth(1)  # Set the width of the line
+        x_axis.setPen(x_pen)
+
+        # Set the pen color and width for the Y axis (green)
+        y_pen = y_axis.pen()
+        y_pen.setColor(Qt.green)  # Set the color to green
+        y_pen.setWidth(1)  # Set the width of the line
+        y_axis.setPen(y_pen)
+
+
+        # Draw marks every 100 units on the X axis
+        for i in range(-large_value, large_value + 1, 100):
+            if i != 0:  # Skip the origin
+                mark = QGraphicsLineItem(i, -5, i, 5)  # Vertical mark
+                self.scene.addItem(mark)
+
+        # Draw marks every 100 units on the Y axis
+        for i in range(-large_value, large_value + 1, 100):
+            if i != 0:  # Skip the origin
+                mark = QGraphicsLineItem(-5, i, 5, i)  # Horizontal mark
+                self.scene.addItem(mark)
+
+
 
 class MouseEventHandler(QObject):
     def __init__(self, main_ui):
@@ -244,7 +397,7 @@ class MouseEventHandler(QObject):
         self.zoom_level = 1.0
         self.is_panning = False
         self.pan_start_pos = QPoint()
-        self.apply_zoom_transform()
+        #self.apply_zoom_transform()
 
 
     def eventFilter(self, source, event):
@@ -288,16 +441,23 @@ class MouseEventHandler(QObject):
         factor = 1.1 if event.angleDelta().y() > 0 else 0.9
         self.zoom_level = min(max(self.zoom_level * factor, 0.1), 10.0)
         self.apply_zoom_transform()
+        self.update_zoom_label()
 
+       
     def apply_zoom_transform(self):
-        transform = QTransform().scale(self.zoom_level, -self.zoom_level)
+        transform = QTransform().scale(self.zoom_level, self.zoom_level)
         self.view.setTransform(transform)
+    
 
     def update_coordinates(self, event):
         scene_pos = self.view.mapToScene(event.pos())
         self.main_ui.label_2.setText(f"X: {scene_pos.x():.2f}")
         self.main_ui.label_6.setText(f"Y: {scene_pos.y():.2f}")
 
+
+    def update_zoom_label(self):
+        zoom_percentage = self.zoom_level * 100  # Convert to percentage
+        self.main_ui.label_zoom.setText(f"Zoom: {zoom_percentage:.0f}%")
 
 class CADInstance(QGraphicsPixmapItem):
     all_instances = []  # Class variable to store all CAD instances
@@ -308,10 +468,10 @@ class CADInstance(QGraphicsPixmapItem):
         self.inputs = inputs
         self.main_ui = main_ui
         self.x_position = x_position
-        self.y_position = y_position
+        self.y_position = -y_position
         self.block_type = block_type
         self.setPixmap(QPixmap(image_folder))
-        self.setPos(x_position, y_position)
+        self.setPos(self.x_position, self.y_position)
         self.setFlag(QGraphicsItem.ItemIsSelectable, True)
         self.setFlag(QGraphicsItem.ItemIsMovable, True)  # Ensure the item is movable
         self.form_widget = QWidget()
@@ -320,9 +480,10 @@ class CADInstance(QGraphicsPixmapItem):
         self.data = {}
         # Check for duplicates before appending
         self.add_instance()
-
+  
         # Connect position synchronization
         self.position_changed()
+
 
     def add_instance(self):
         if not self.is_duplicate():
@@ -353,13 +514,15 @@ class CADInstance(QGraphicsPixmapItem):
         self.x_position = self.x()
         self.y_position = self.y()
 
+        """
     def itemChange(self, change, value):
-        """Handle position updates"""
+         #Handle position updates
         if change == QGraphicsItem.ItemPositionHasChanged:
             prev_x, prev_y = self.x(), self.y()   #MDELACRUZ
             self.main_ui.save_action("move_block", (self.cad_instance.block_type, prev_x, prev_y))  #MDELACRUZ
             self.position_changed()
         return super().itemChange(change, value)
+        """
 
     def mousePressEvent(self, event):
         if event.button() == Qt.RightButton:
@@ -419,7 +582,7 @@ class CADInstance(QGraphicsPixmapItem):
             table_widget.setItem(row, 1, QTableWidgetItem(str(value)))
             row += 1
 
-class PositionEditor(QDialog):  #MDELACRUZ
+"""class PositionEditor(QDialog):  #MDELACRUZ
     def __init__(self, parent=None, pos_x=0, pos_y=0):  #MDELACRUZ
         super(PositionEditor, self).__init__(parent)
         self.setWindowTitle("Editar Posición")  #MDELACRUZ
@@ -446,7 +609,7 @@ class PositionEditor(QDialog):  #MDELACRUZ
         self.setLayout(layout)  #MDELACRUZ
 
     def get_positions(self):  #MDELACRUZ
-        return float(self.x_input.text()), float(self.y_input.text())  #MDELACRUZ
+        return float(self.x_input.text()), float(self.y_input.text())  #MDELACRUZ"""
 
 class ParametrosGenerales(QDialog):
     def __init__(self, some_dictionary, parent=None):
@@ -455,11 +618,10 @@ class ParametrosGenerales(QDialog):
         self.form_layout = QFormLayout()
         self.setLayout(self.form_layout)
         self.populate_form()
-
+        self.saved_data = {}
         save_button = QPushButton("Save")
         save_button.clicked.connect(self.save_data_as_dictionary)
         self.form_layout.addRow(save_button)
-
     def populate_form(self):
         for key, value in self.some_dictionary.items():
             label = QLabel(key)
@@ -468,16 +630,17 @@ class ParametrosGenerales(QDialog):
             self.form_layout.addRow(label, line_edit)
 
     def save_data_as_dictionary(self):
-        saved_data = {}
+
         for i in range(self.form_layout.count()):
             row = self.form_layout.itemAt(i)
             if isinstance(row, QWidgetItem):
                 widget = row.widget()
                 if isinstance(widget, QLineEdit):
                     label = self.form_layout.labelForField(widget)
-                    saved_data[label.text()] = widget.text()
-        print("Saved Data:", saved_data)  # Consider replacing with logging
+                    self.saved_data[label.text()] = widget.text()
+        print("Saved Data:", self.saved_data)  # Consider replacing with logging
         self.accept()
+
 
 class objeto_hoja_calculo_de_aislamiento():
 
