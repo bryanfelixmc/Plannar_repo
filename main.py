@@ -39,6 +39,13 @@ class MainUI(QMainWindow):
         self.button01.clicked.connect(lambda: self.add_images(self.images_variations[0],"SB_LINEA_PROY"))### aqui deberia ir el nuevo objeto sb_bay_line()
         self.button05.clicked.connect(lambda: self.add_images(self.images_variations[1],"SB_LINEA_PROY"))
         self.button06.clicked.connect(lambda: self.add_images(self.images_variations[2],"SB_LINEA_PROY"))
+        
+        #DB BAY DOWN
+        self.pushButton_29.clicked.connect(lambda: self.add_images(self.images_variations[3],"DB_LINEA_PROY"))
+
+        #DB BAY UP
+        self.pushButton_28.clicked.connect(lambda: self.add_images(self.images_variations[4],"DB_LINEA_PROY"))### aqui deberia ir el nuevo objeto sb_bay_line()
+
         self.button02.clicked.connect(self.print_all_data_instances)
         self.button04.clicked.connect(self.cad_plot)
         self.button03.clicked.connect(lambda: self.abrir_calc_aisl('CSL-242600-1-06-MC-001.xlsx'))
@@ -85,7 +92,7 @@ class MainUI(QMainWindow):
     def initialize_images_variations(self):             #SVC
         bil = 1050
         return [
-            # Variation 1  bay_down
+            # SB  bay_down
             [
                 ["LL__LINEA_PROY_DWN.jpg", 0, 280+280, {"Carga (MW)": 0, "Nombre": 0, "Codigo de Linea": 0}, "SALIDA_LINEA_DWN"],
                 ["PR__LINEA_PROY.jpg", 0, 280+240, {"Tension nominal (kV)": 0, "BIL (kVp)": bil, "I nominal (A)": 0, "Clase": 0}, "Pararrayos c-cd1"],
@@ -96,7 +103,7 @@ class MainUI(QMainWindow):
                 ["SB__LINEA_PROY_DWN.jpg", 0, 280+40, {"Tension nominal (kV)": 0, "BIL (kVp)": bil, "I nominal (A)": 0, "Tipo": 0}, "SB_AT_AC_DOWN"],
             ],
 
-            # Variation 2   bay_up
+            # SB   bay_up
 
             [
                 ["LL__LINEA_PROY.jpg", 0, 40, {"Carga (MW)": 0, "Nombre": 0, "Codigo de Linea": 0}, "SALIDA_LINEA"],
@@ -108,7 +115,7 @@ class MainUI(QMainWindow):
                 ["SB__LINEA_PROY.jpg", 0, 280, {"Tension nominal (kV)": 0, "BIL (kVp)": bil, "I nominal (A)": 0, "Tipo": 0}, "SB_AT_AC"],
             ],
 
-            # Variation 3
+            # SB _
             [
                 ["LL__LINEA_PROY.jpg", 0, 40, {"Carga (MW)": 0, "Nombre": 0, "Codigo de Linea": 0}, "-"],
                 ["PR__LINEA_PROY.jpg", 0, 100, {"Tension nominal (kV)": 0, "BIL (kVp)": bil, "I nominal (A)": 0, "Clase": 0}, "Pararrayos c-cd1"],
@@ -117,30 +124,57 @@ class MainUI(QMainWindow):
                 ["TC__LINEA_PROY.jpg", 0, 280, {"Tension nominal (kV)": 0, "BIL (kVp)": bil, "I nominal (A)": 0, "Tipo": 0, "Relacion devanado primario": 0, "Relacion devanado secundario": 0, "Burden": 0}, "_"],
                 ["IP__LINEA_PROY.jpg", 0, 340, {"Tension nominal (kV)": 0, "BIL (kVp)": bil, "I nominal (A)": 0}, "_"],
                 ["SB__LINEA_PROY.jpg", 0, 400, {"Tension nominal (kV)": 0, "BIL (kVp)": bil, "I nominal (A)": 0, "Tipo": 0}, "_"],
+            ],
+            #DB BAY DOWN
+            [
+                ["LL__LINEA_PROY_DWN.png", 0, 280+280, {"Carga (MW)": 0, "Nombre": 0, "Codigo de Linea": 0}, "SALIDA_LINEA_DWN"],
+                ["PR__LINEA_PROY.png", 0, 280+240, {"Tension nominal (kV)": 0, "BIL (kVp)": bil, "I nominal (A)": 0, "Clase": 0}, "Pararrayos c-cd1"],
+                ["TTC_LINEA_PROY.png", 0, 280+200, {"Tension nominal (kV)": 0, "BIL (kVp)": bil, "Clase de Proteccion": 0, "Tipo": 0}, "TTC_AT_2S"],
+                ["SL__LINEA_PROY.png", 0, 280+160, {"Tension nominal (kV)": 0, "BIL (kVp)": bil, "I nominal (A)": 0, "Tipo": 0}, "SL_AT_AV_DOWN1"],
+                ["TC__LINEA_PROY.png", 0, 280+120, {"Tension nominal (kV)": 0, "BIL (kVp)": bil, "I nominal (A)": 0, "Tipo": 0, "Relacion devanado primario": 0, "Relacion devanado secundario": 0, "Burden": 0}, "CT_AT_4S"],
+                ["IP__LINEA_PROY.png", 0, 280+80, {"Tension nominal (kV)": 0, "BIL (kVp)": bil, "I nominal (A)": 0}, "IP_AT"],
+                ["SB__LINEA_PROY_DWN.png", 0, 280+40, {"Tension nominal (kV)": 0, "BIL (kVp)": bil, "I nominal (A)": 0, "Tipo": 0}, "SB_AT_AC_DOWN"],
+            ],
+
+            #DB BAY UP
+
+            [
+                ["LL__LINEA_PROY.png", 0, 40, {"Carga (MW)": 0, "Nombre": 0, "Codigo de Linea": 0}, "SALIDA_LINEA"],
+                ["PR__LINEA_PROY.png", 0, 80, {"Tension nominal (kV)": 0, "BIL (kVp)": bil, "I nominal (A)": 0, "Clase": 0,}, "Pararrayos c-cd1"],
+                ["TTC_LINEA_PROY.png", 0, 120, {"Tension nominal (kV)": 0, "BIL (kVp)": bil, "Clase de Proteccion": 0, "Tipo": 0}, "TTC_AT_2S"],
+                ["SL__LINEA_PROY.png", 0, 160, {"Tension nominal (kV)": 0, "BIL (kVp)": bil, "I nominal (A)": 0, "Tipo": 0}, "SL_AT_AV_DOWN2"],
+                ["TC__LINEA_PROY.png", 0, 200, {"Tension nominal (kV)": 0, "BIL (kVp)": bil, "I nominal (A)": 0, "Tipo": 0, "Relacion devanado primario": 0, "Relacion devanado secundario": 0, "Burden": 0}, "CT_AT_4S_DOWN"],
+                ["IP__LINEA_PROY.png", 0, 240, {"Tension nominal (kV)": 0, "BIL (kVp)": bil, "I nominal (A)": 0}, "IP_AT_DOWN"],
+                ["SB__LINEA_PROY.png", 0, 280, {"Tension nominal (kV)": 0, "BIL (kVp)": bil, "I nominal (A)": 0, "Tipo": 0}, "SB_AT_AC"],
             ]
         ]
 
 
     def add_images(self, images, folder):
-        folder1 = os.path.join(os.getcwd(), "SB_LINEA_PROY")
+        folder1 = os.path.join(os.getcwd(), folder)
         aux1=[]
         for image in images:
             image_name, _, y_position, inputs, block_type = image
 
             try:
-                pixmap = QPixmap(os.path.join(folder1, image_name)).scaled(85, 40)
+                pixmap = QPixmap(os.path.join(folder1, image_name)).scaled(85, 40, Qt.KeepAspectRatio, Qt.SmoothTransformation) #(85,40)
+                
+                # Calculate the position to center the image
+                x_centered = self.d_horizontal + (40 - pixmap.width()) / 2
+                y_centered = y_position + (40 - pixmap.height()) / 2
+                
                 image_widget = CADInstance(
                     image_folder=os.path.join(os.getcwd(),folder),
                     image_name=image_name,
                     inputs=inputs,
                     main_ui=self,
-                    x_position=self.d_horizontal,
-                    y_position=y_position,
+                    x_position=x_centered,
+                    y_position=y_centered,
                     block_type=block_type
                 )
                 
                 image_widget.setPixmap(pixmap)
-                image_widget.setPos(self.d_horizontal, y_position)
+                image_widget.setPos(x_centered, y_centered)
                 self.graphics_view.scene.addItem(image_widget)
 
 
