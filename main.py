@@ -94,7 +94,7 @@ class MainUI(QMainWindow):
         return [
             # SB  bay_down
             [
-                ["LL__LINEA_PROY_DWN.jpg", 0, 280+280, {"Carga (MW)": 0, "Nombre": 0, "Codigo de Linea": 0}, "SALIDA_LINEA_DWN"],
+                ["LL__LINEA_PROY_DWN.jpg", 0, 280+270, {"Carga (MW)": 0, "Nombre": 0, "Codigo de Linea": 0}, "SALIDA_LINEA_DWN"],
                 ["PR__LINEA_PROY.jpg", 0, 280+240, {"Tension nominal (kV)": 0, "BIL (kVp)": bil, "I nominal (A)": 0, "Clase": 0}, "Pararrayos c-cd1"],
                 ["TTC_LINEA_PROY.jpg", 0, 280+200, {"Tension nominal (kV)": 0, "BIL (kVp)": bil, "Clase de Proteccion": 0, "Tipo": 0}, "TTC_AT_2S"],
                 ["SL__LINEA_PROY.jpg", 0, 280+160, {"Tension nominal (kV)": 0, "BIL (kVp)": bil, "I nominal (A)": 0, "Tipo": 0}, "SL_AT_AV_DOWN1"],
@@ -106,7 +106,7 @@ class MainUI(QMainWindow):
             # SB   bay_up
 
             [
-                ["LL__LINEA_PROY.jpg", 0, 40, {"Carga (MW)": 0, "Nombre": 0, "Codigo de Linea": 0}, "SALIDA_LINEA"],
+                ["LL__LINEA_PROY.jpg", 0, 50, {"Carga (MW)": 0, "Nombre": 0, "Codigo de Linea": 0}, "SALIDA_LINEA"],
                 ["PR__LINEA_PROY.jpg", 0, 80, {"Tension nominal (kV)": 0, "BIL (kVp)": bil, "I nominal (A)": 0, "Clase": 0,}, "Pararrayos c-cd1"],
                 ["TTC_LINEA_PROY.jpg", 0, 120, {"Tension nominal (kV)": 0, "BIL (kVp)": bil, "Clase de Proteccion": 0, "Tipo": 0}, "TTC_AT_2S"],
                 ["SL__LINEA_PROY.jpg", 0, 160, {"Tension nominal (kV)": 0, "BIL (kVp)": bil, "I nominal (A)": 0, "Tipo": 0}, "SL_AT_AV_DOWN2"],
@@ -127,24 +127,24 @@ class MainUI(QMainWindow):
             ],
             #DB BAY DOWN
             [
-                ["LL__LINEA_PROY_DWN.png", 0, 280+280, {"Carga (MW)": 0, "Nombre": 0, "Codigo de Linea": 0}, "SALIDA_LINEA_DWN"],
-                ["PR__LINEA_PROY.png", 0, 280+240, {"Tension nominal (kV)": 0, "BIL (kVp)": bil, "I nominal (A)": 0, "Clase": 0}, "Pararrayos c-cd1"],
-                ["TTC_LINEA_PROY.png", 0, 280+200, {"Tension nominal (kV)": 0, "BIL (kVp)": bil, "Clase de Proteccion": 0, "Tipo": 0}, "TTC_AT_2S"],
-                ["SL__LINEA_PROY.png", 0, 280+160, {"Tension nominal (kV)": 0, "BIL (kVp)": bil, "I nominal (A)": 0, "Tipo": 0}, "SL_AT_AV_DOWN1"],
-                ["TC__LINEA_PROY.png", 0, 280+120, {"Tension nominal (kV)": 0, "BIL (kVp)": bil, "I nominal (A)": 0, "Tipo": 0, "Relacion devanado primario": 0, "Relacion devanado secundario": 0, "Burden": 0}, "CT_AT_4S"],
-                ["IP__LINEA_PROY.png", 0, 280+80, {"Tension nominal (kV)": 0, "BIL (kVp)": bil, "I nominal (A)": 0}, "IP_AT"],
-                ["SB__LINEA_PROY_DWN.png", 0, 280+40, {"Tension nominal (kV)": 0, "BIL (kVp)": bil, "I nominal (A)": 0, "Tipo": 0}, "SB_AT_AC_DOWN"],
+                ["LL__LINEA_PROY_DWN.png", 0, 280+280-14, {"Carga (MW)": 0, "Nombre": 0, "Codigo de Linea": 0}, "SALIDA_LINEA_DWN"],
+                ["PR__LINEA_PROY.png", 18.5, 280+240-14, {"Tension nominal (kV)": 0, "BIL (kVp)": bil, "I nominal (A)": 0, "Clase": 0}, "Pararrayos c-cd1"],
+                ["TTC_LINEA_PROY.png", 10.5, 280+200-14, {"Tension nominal (kV)": 0, "BIL (kVp)": bil, "Clase de Proteccion": 0, "Tipo": 0}, "TTC_AT_2S"],
+                ["SL__LINEA_PROY.png", -5, 280+160-14, {"Tension nominal (kV)": 0, "BIL (kVp)": bil, "I nominal (A)": 0, "Tipo": 0}, "SL_AT_AV_DOWN1"],
+                ["TC__LINEA_PROY.png", 0.5, 280+120-14, {"Tension nominal (kV)": 0, "BIL (kVp)": bil, "I nominal (A)": 0, "Tipo": 0, "Relacion devanado primario": 0, "Relacion devanado secundario": 0, "Burden": 0}, "CT_AT_4S"],
+                ["IP__LINEA_PROY.png", 9.5, 280+80-14, {"Tension nominal (kV)": 0, "BIL (kVp)": bil, "I nominal (A)": 0}, "IP_AT"],
+                ["SB__LINEA_PROY_DWN.png", 0, 280+40-14, {"Tension nominal (kV)": 0, "BIL (kVp)": bil, "I nominal (A)": 0, "Tipo": 0}, "SB_AT_AC_DOWN"],
             ],
 
             #DB BAY UP
 
             [
                 ["LL__LINEA_PROY.png", 0, 40, {"Carga (MW)": 0, "Nombre": 0, "Codigo de Linea": 0}, "SALIDA_LINEA"],
-                ["PR__LINEA_PROY.png", 0, 80, {"Tension nominal (kV)": 0, "BIL (kVp)": bil, "I nominal (A)": 0, "Clase": 0,}, "Pararrayos c-cd1"],
-                ["TTC_LINEA_PROY.png", 0, 120, {"Tension nominal (kV)": 0, "BIL (kVp)": bil, "Clase de Proteccion": 0, "Tipo": 0}, "TTC_AT_2S"],
-                ["SL__LINEA_PROY.png", 0, 160, {"Tension nominal (kV)": 0, "BIL (kVp)": bil, "I nominal (A)": 0, "Tipo": 0}, "SL_AT_AV_DOWN2"],
-                ["TC__LINEA_PROY.png", 0, 200, {"Tension nominal (kV)": 0, "BIL (kVp)": bil, "I nominal (A)": 0, "Tipo": 0, "Relacion devanado primario": 0, "Relacion devanado secundario": 0, "Burden": 0}, "CT_AT_4S_DOWN"],
-                ["IP__LINEA_PROY.png", 0, 240, {"Tension nominal (kV)": 0, "BIL (kVp)": bil, "I nominal (A)": 0}, "IP_AT_DOWN"],
+                ["PR__LINEA_PROY.png", 18.5, 80, {"Tension nominal (kV)": 0, "BIL (kVp)": bil, "I nominal (A)": 0, "Clase": 0,}, "Pararrayos c-cd1"],
+                ["TTC_LINEA_PROY.png", 10.5, 120, {"Tension nominal (kV)": 0, "BIL (kVp)": bil, "Clase de Proteccion": 0, "Tipo": 0}, "TTC_AT_2S"],
+                ["SL__LINEA_PROY.png", -5, 160, {"Tension nominal (kV)": 0, "BIL (kVp)": bil, "I nominal (A)": 0, "Tipo": 0}, "SL_AT_AV_DOWN2"],
+                ["TC__LINEA_PROY.png", 0.5, 200, {"Tension nominal (kV)": 0, "BIL (kVp)": bil, "I nominal (A)": 0, "Tipo": 0, "Relacion devanado primario": 0, "Relacion devanado secundario": 0, "Burden": 0}, "CT_AT_4S_DOWN"],
+                ["IP__LINEA_PROY.png", 9.5, 240, {"Tension nominal (kV)": 0, "BIL (kVp)": bil, "I nominal (A)": 0}, "IP_AT_DOWN"],
                 ["SB__LINEA_PROY.png", 0, 280, {"Tension nominal (kV)": 0, "BIL (kVp)": bil, "I nominal (A)": 0, "Tipo": 0}, "SB_AT_AC"],
             ]
         ]
@@ -154,13 +154,13 @@ class MainUI(QMainWindow):
         folder1 = os.path.join(os.getcwd(), folder)
         aux1=[]
         for image in images:
-            image_name, _, y_position, inputs, block_type = image
+            image_name, x_position, y_position, inputs, block_type = image
 
             try:
                 pixmap = QPixmap(os.path.join(folder1, image_name)).scaled(85, 40, Qt.KeepAspectRatio, Qt.SmoothTransformation) #(85,40)
                 
                 # Calculate the position to center the image
-                x_centered = self.d_horizontal + (40 - pixmap.width()) / 2
+                x_centered = x_position+self.d_horizontal + (40 - pixmap.width()) / 2
                 y_centered = y_position + (40 - pixmap.height()) / 2
                 
                 image_widget = CADInstance(
@@ -188,7 +188,12 @@ class MainUI(QMainWindow):
             except Exception as e:
                 
                 print(f"Error loading image {image_name}: {e}")
-        self.d_horizontal += 85  # Update d_horizontal for the next image
+        
+        
+        if folder=="SB_LINEA_PROY":
+            self.d_horizontal += 78  # Update d_horizontal for the next image
+        elif folder=="DB_LINEA_PROY":
+            self.d_horizontal += 35  # Update d_horizontal for the next image
         return aux1
     
     def cad_plot(self):
